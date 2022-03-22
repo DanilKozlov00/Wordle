@@ -1,0 +1,5 @@
+language: java
+jdk: oraclejdk11
+script:
+  - javac -d target/classes/Wordle -cp src/test/resources/junit-4.13.2.jar -sourcepath src/main/java;src/test/java src/test/java/*.java;
+  - java -classpath target/classes/Wordle;src/test/resources/junit-4.13.2.jar GameTest
