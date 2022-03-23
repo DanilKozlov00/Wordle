@@ -1,6 +1,5 @@
 # Wordle 
 [![Build Status](https://app.travis-ci.com/DanilKozlov00/Wordle.svg?token=YjJ7dvZ32iyxGEscJx5P&branch=master)](https://app.travis-ci.com/DanilKozlov00/Wordle)
-[![wakatime](https://wakatime.com/badge/user/d74ccb6e-3198-45e4-9755-7d8e0cbe5929/project/24100670-d8a1-4dc5-aeea-29bc37f2d382.svg)](https://wakatime.com/badge/user/d74ccb6e-3198-45e4-9755-7d8e0cbe5929/project/24100670-d8a1-4dc5-aeea-29bc37f2d382)
 
 # Задание 1. Java Core. #
 
