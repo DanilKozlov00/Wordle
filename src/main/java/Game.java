@@ -2,22 +2,22 @@ import java.util.*;
 
 public class Game {
 
-    static final String GAME_WIN = "Game is win";
-    static final String GAME_LOSE = "Game is lose";
-    static final String INCORRECT_WORD = "Incorrect word";
-    static final String INCORRECT_INPUT = "Incorrect input, try another word!";
-    static final int WORD_LENGTH = 5;
-    static final int MAX_STEPS = 6;
-
-    Integer stepsCount = 0;
-    String hiddenWord;
-    List<String> allWords;
-
     private enum Character_Position {
         CORRECT_POSITION,
         INCORRECT_POSITION,
         MISSING_IN_WORD
     }
+
+   public static final String GAME_WIN = "Game is win";
+   public static final String GAME_LOSE = "Game is lose";
+   public static final String INCORRECT_WORD = "Incorrect word";
+   public static final String INCORRECT_INPUT = "Incorrect input, try another word!";
+   private static final int WORD_LENGTH = 5;
+   private static final int MAX_STEPS = 6;
+
+    private Integer stepsCount = 0;
+    private String hiddenWord;
+    private final List<String> allWords;
 
     public Game(Dictionary dictionary) {
         allWords = dictionary.readDictionary();
@@ -70,5 +70,10 @@ public class Game {
         } else {
             return INCORRECT_INPUT;
         }
+    }
+
+    public void startNewGame(String hiddenWord) {
+        stepsCount = 0;
+        this.hiddenWord = hiddenWord;
     }
 }
