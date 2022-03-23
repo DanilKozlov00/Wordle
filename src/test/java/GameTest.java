@@ -6,20 +6,27 @@ public class GameTest {
 
     Game game;
 
+    private final static String TEST_PASSED = "/8 test passed";
+
     public static void main(String[] args) {
         GameTest gameTest = new GameTest();
         gameTest.testLoseGame();
-        System.out.println("1/6 test passed");
+        System.out.println("1" + TEST_PASSED);
         gameTest.testWinGameInRandomInput();
-        System.out.println("2/6 test passed");
+        System.out.println("2" + TEST_PASSED);
         gameTest.testWinGameInLastStep();
-        System.out.println("3/6 test passed");
+        System.out.println("3" + TEST_PASSED);
         gameTest.testIncorrectWord();
-        System.out.println("4/6 test passed");
+        System.out.println("4" + TEST_PASSED);
         gameTest.testIncorrectInput();
-        System.out.println("5/6 test passed");
+        System.out.println("5" + TEST_PASSED);
         gameTest.testWinGameInOneStep();
-        System.out.println("6/6 test passed");
+        System.out.println("6" + TEST_PASSED);
+        gameTest.testWinGameInOneStepUpperCase();
+        System.out.println("7" + TEST_PASSED);
+        gameTest.testWinGameInOneStepRandomCase();
+        System.out.println("8" + TEST_PASSED);
+
     }
 
     @Test
@@ -51,6 +58,18 @@ public class GameTest {
     public void testWinGameInOneStep() {
         game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
         assertEquals(Game.GAME_WIN, game.getStepResult("toast"));
+    }
+
+    @Test
+    public void testWinGameInOneStepUpperCase() {
+        game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
+        assertEquals(Game.GAME_WIN, game.getStepResult("TOAST"));
+    }
+
+    @Test
+    public void testWinGameInOneStepRandomCase() {
+        game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
+        assertEquals(Game.GAME_WIN, game.getStepResult("ToASt"));
     }
 
     @Test

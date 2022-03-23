@@ -33,13 +33,13 @@ public class Game {
         if (inputWord.length() != WORD_LENGTH) {
             return false;
         }
-        return allWords.contains(inputWord);
+        return allWords.contains(inputWord.toLowerCase());
     }
 
     private List<AbstractMap.SimpleEntry<Character, Character_Position>> getCharactersPosition(String inputWord) {
         List<AbstractMap.SimpleEntry<Character, Character_Position>> result = new LinkedList<>();
         for (int i = 0; i < inputWord.length(); i++) {
-            char characterToCheck = inputWord.charAt(i);
+            char characterToCheck = inputWord.toLowerCase().charAt(i);
             if (hiddenWord.indexOf(characterToCheck) != -1) {
                 if (hiddenWord.charAt(i) == characterToCheck) {
                     result.add(new AbstractMap.SimpleEntry<>(characterToCheck, Character_Position.CORRECT_POSITION));
