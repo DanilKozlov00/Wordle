@@ -1,3 +1,5 @@
+package wordle;
+
 import java.util.List;
 
 public interface Dictionary {

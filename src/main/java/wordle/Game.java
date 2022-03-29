@@ -1,3 +1,5 @@
+package wordle;
+
 import java.util.*;
 
 public class Game {
@@ -8,8 +10,12 @@ public class Game {
         MISSING_IN_WORD
     }
 
-   public static final String GAME_WIN = "Game is win";
-   public static final String GAME_LOSE = "Game is lose";
+    public static void main(String[] args) {
+        Game game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "TOAST");
+    }
+
+   public static final String GAME_WIN = "wordle.Game is win";
+   public static final String GAME_LOSE = "wordle.Game is lose";
    public static final String INCORRECT_WORD = "Incorrect word";
    public static final String INCORRECT_INPUT = "Incorrect input, try another word!";
    private static final int WORD_LENGTH = 5;
