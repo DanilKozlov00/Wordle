@@ -2,6 +2,6 @@ language: java
 jdk: oraclejdk11
 script:
   - javac -d target/classes/  src/main/java/wordle/*.java
-  - javac -d target/classes/ -cp src/test/resources/junit-4.13.2.jar -sourcepath src/main/java/ src/test/java/wordleTest/*.java
+  - javac -d target/classes/ -cp src/test/resources/libs/junit-4.13.2.jar -sourcepath src/main/java/ src/test/java/wordleTest/*.java
   - java -classpath target/classes/:src/test/resources/libs/junit-4.13.2.jar:src/test/resources/libs/hamcrest-core-1.3.jar  org.junit.runner.JUnitCore wordleTest.GameTest
 
