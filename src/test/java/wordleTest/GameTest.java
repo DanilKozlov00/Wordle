@@ -10,7 +10,6 @@ public class GameTest {
 
     Game game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), TOAST);
 
-    private final static String TEST_PASSED = "/8 test passed";
     private final static String WORDS = "words";
     private final static String THEIR = "their";
     private final static String AFTER = "after";
@@ -22,26 +21,6 @@ public class GameTest {
     private final static String PLAY = "play";
     private final static String A = "a";
     private final static String THERE = "there";
-
-    public static void main(String[] args) {
-        GameTest gameTest = new GameTest();
-        gameTest.testIncorrectWord();
-        System.out.println("1" + TEST_PASSED);
-        gameTest.testIncorrectInput();
-        System.out.println("2" + TEST_PASSED);
-        gameTest.testWinGameInOneStep();
-        System.out.println("3" + TEST_PASSED);
-        gameTest.testWinGameInOneStepUpperCase();
-        System.out.println("4" + TEST_PASSED);
-        gameTest.testWinGameInOneStepRandomCase();
-        System.out.println("5" + TEST_PASSED);
-        gameTest.testWinGameInLastStep();
-        System.out.println("6" + TEST_PASSED);
-        gameTest.testWinGameInRandomInput();
-        System.out.println("7" + TEST_PASSED);
-        gameTest.testLoseGame();
-        System.out.println("8" + TEST_PASSED);
-    }
 
     @Test
     public void testIncorrectWord() {

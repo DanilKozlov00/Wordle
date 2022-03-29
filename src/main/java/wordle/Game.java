@@ -10,10 +10,6 @@ public class Game {
         MISSING_IN_WORD
     }
 
-    public static void main(String[] args) {
-        Game game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "TOAST");
-    }
-
    public static final String GAME_WIN = "Game is win";
    public static final String GAME_LOSE = "Game is lose";
    public static final String INCORRECT_WORD = "Incorrect word";
