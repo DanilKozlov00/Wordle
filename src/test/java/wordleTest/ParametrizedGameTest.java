@@ -3,7 +3,6 @@ package wordleTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import wordle.Dictionary;
 import wordle.Game;
 import wordle.TxtDictionary;
 
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class ParametrizedGameTest {
     private String inputWord;
     private String stepResult;
-    private Impostor game = Impostor.getImpostor();
+    private static final Game game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
 
     public ParametrizedGameTest(String inputWord, String stepResult) {
         super();
@@ -58,18 +57,5 @@ public class ParametrizedGameTest {
             ioException.printStackTrace();
         }
         return fileLines;
-    }
-}
-
-class Impostor extends Game {
-
-    private static final Impostor impostor = new Impostor(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
-
-    public Impostor(Dictionary dictionary, String hiddenWord) {
-        super(dictionary, hiddenWord);
-    }
-
-    public static Impostor getImpostor() {
-        return impostor;
     }
 }
