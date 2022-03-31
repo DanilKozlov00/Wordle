@@ -12,11 +12,6 @@ public class TxtDictionary implements Dictionary {
 
     private final String dictionaryFileName;
 
-    @Override
-    public String getDictionaryPath() {
-        return dictionaryFileName;
-    }
-
     public TxtDictionary(String dictionaryFileName) {
         this.dictionaryFileName = dictionaryFileName;
     }
