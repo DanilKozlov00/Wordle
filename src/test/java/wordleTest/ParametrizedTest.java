@@ -11,7 +11,7 @@ public class ParametrizedTest {
 
     private static final Game game = new Game(new TxtDictionary("src/main/resources/dictionaries/dictionary.txt"), "toast");
 
-    @ParameterizedTest()
+    @ParameterizedTest(name="#{index} - InputWord={0},StepResult={1}")
     @CsvFileSource(resources = "/testData/data.csv", delimiter = ';')
     void testStepResult(String inputWord, String stepResult) {
         String gameResult = game.getStepResult(inputWord);
