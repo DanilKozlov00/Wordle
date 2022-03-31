@@ -26,7 +26,7 @@ public class ParametrizedGameTest {
         this.stepResult = stepResult;
     }
 
-    @Parameterized.Parameters()
+    @Parameterized.Parameters(name="#{index} - InputWord={0},StepResult={1}")
     public static List<Object[]> inputData() {
         List<Object[]> parametersProvided = new ArrayList<>();
         for (String line : readFromCSV("src/test/resources/testData/data.csv")) {
