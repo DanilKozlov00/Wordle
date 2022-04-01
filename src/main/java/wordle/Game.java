@@ -10,21 +10,23 @@ public class Game {
         MISSING_IN_WORD
     }
 
-   public static final String GAME_WIN = "Game is win";
-   public static final String GAME_LOSE = "Game is lose";
-   public static final String INCORRECT_WORD = "Incorrect word";
-   public static final String INCORRECT_INPUT = "Incorrect input, try another word!";
-   private static final int WORD_LENGTH = 5;
-   private static final int MAX_STEPS = 6;
+    public static final String GAME_WIN = "Game is win";
+    public static final String GAME_LOSE = "Game is lose";
+    public static final String INCORRECT_WORD = "Incorrect word";
+    public static final String INCORRECT_INPUT = "Incorrect input, try another word!";
+    private static final int WORD_LENGTH = 5;
+    private static final int MAX_STEPS = 6;
 
     private Integer stepsCount = 0;
     private String hiddenWord;
     private final List<String> allWords;
 
+    /*
     public Game(Dictionary dictionary) {
         allWords = dictionary.readDictionary();
         hiddenWord = allWords.get(new Random().nextInt(allWords.size()));
     }
+     */
 
     public Game(Dictionary dictionary, String hiddenWord) {
         allWords = dictionary.readDictionary();
