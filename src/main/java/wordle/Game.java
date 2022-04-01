@@ -21,10 +21,12 @@ public class Game {
     private String hiddenWord;
     private final List<String> allWords;
 
+    /*
     public Game(Dictionary dictionary) {
         allWords = dictionary.readDictionary();
         hiddenWord = allWords.get(new Random().nextInt(allWords.size()));
     }
+    */
 
     public Game(Dictionary dictionary, String hiddenWord) {
         allWords = dictionary.readDictionary();
