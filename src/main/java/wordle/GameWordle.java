@@ -1,37 +1,56 @@
 package wordle;
 
-import java.util.*;
-
-import static wordle.WordleRule.*;
-
 /**
  * Класс игры Wordle
- * Отвечает за инициализацию игры и взаимодествие с пользователем
+ * Отвечает за состояние игры
  */
 public class GameWordle {
 
-    private final GameRule gameRule;
+    private final WordleRule gameRule;
+
     private String hiddenWord;
     private int countSteps = 0;
 
-    public GameWordle(GameRule gameRule, String hiddenWord) {
+    public GameWordle(WordleRule gameRule, String hiddenWord) {
         this.gameRule = gameRule;
         this.hiddenWord = hiddenWord;
     }
 
-    public GameWordle(GameRule gameRule) {
-        this.gameRule = gameRule;
-        List<String> allWords = gameRule.getRuleDictionary().readDictionary();
-        hiddenWord = allWords.get(new Random().nextInt(allWords.size()));
+    public GameWordle(WordleRule gameRule) {
+        this(gameRule, gameRule.getRuleDictionary().readRandomWord());
     }
 
     /**
-     * Возвращает состояние игры к первоначальному
+     * Геттер
+     *
+     * @return возвращает кол-во шагов на данный момент
+     */
+    public int getCountSteps() {
+        return countSteps;
+    }
+
+    /**
+     * Увеличивает счетчик ходов на данный момент
+     */
+    public void incrementCountSteps() {
+        countSteps++;
+    }
+
+    /**
+     * Геттер
+     *
+     * @return возвращает правила заданной игры
+     */
+    public WordleRule getGameRule() {
+        return gameRule;
+    }
+
+    /**
+     * Перезапускает игру с новым загаданным словом
      */
     public void restartGame() {
         countSteps = 0;
-        List<String> allWords = gameRule.getRuleDictionary().readDictionary();
-        hiddenWord = allWords.get(new Random().nextInt(allWords.size()));
+        hiddenWord = gameRule.getRuleDictionary().readRandomWord();
     }
 
     /**
@@ -42,40 +61,4 @@ public class GameWordle {
     public String getHiddenWord() {
         return hiddenWord;
     }
-
-    /**
-     * Описывает правила игры
-     *
-     * @return - Возвращает строку с правилами игры
-     */
-    public String getGameRules() {
-        return gameRule.getRulesInfo();
-    }
-
-    /**
-     * Метод отвечает за взаимодействие класса игры и пользователя
-     * Пользователь вводит слово и получает результат по введенному слову
-     */
-    public String checkWord(String inputWord) {
-        String stepResult = gameRule.getStepResult(inputWord, hiddenWord, countSteps);
-        if (!stepResult.equals(INCORRECT_INPUT)) {
-            countSteps++;
-        }
-        return stepResult;
-    }
-
-    /**
-     * Метод отображающий положение букв в веденном слове. Корректное место, некорректное место, отсутствует в слове.
-     */
-    public void printCharactersPositions(String inputWord, String hiddenWord) {
-        List<AbstractMap.SimpleEntry<Character, String>> charactersPositionsPairs = gameRule.getCharactersPosition(inputWord, hiddenWord);
-        StringBuilder positions = new StringBuilder();
-        for (AbstractMap.SimpleEntry<Character, String> pair : charactersPositionsPairs) {
-            System.out.print(pair.getKey() + " ");
-            positions.append(pair.getValue()).append(" ");
-        }
-        System.out.println();
-        System.out.println(positions);
-    }
-
 }
