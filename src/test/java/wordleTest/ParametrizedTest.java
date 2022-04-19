@@ -2,7 +2,12 @@ package wordleTest;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import wordle.*;
+import wordle.dictionary.TxtDictionary;
+import wordle.game.GameWordle;
+import wordle.game.WordleInterface;
+import wordle.game.WordleRule;
+import wordle.game.interfaceNotations.CharactersIndicators;
+import wordle.game.interfaceNotations.CharactersIndicatorsImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wordle.Main.ENGLISH_TXT_DICTIONARY_PATH;

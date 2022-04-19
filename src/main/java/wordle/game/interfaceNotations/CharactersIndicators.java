@@ -1,4 +1,4 @@
-package wordle;
+package wordle.game.interfaceNotations;
 
 /**
  * Интерфейс определяющий индикаторы положения буквы в слове

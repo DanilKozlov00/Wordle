@@ -1,10 +1,12 @@
-package wordle;
+package wordle.game;
+
+import wordle.game.interfaceNotations.CharactersIndicators;
 
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Scanner;
 
-import static wordle.WordleRule.*;
+import static wordle.game.WordleRule.*;
 
 /**
  * Класс отвечает за взаимодействие игры с пользователем

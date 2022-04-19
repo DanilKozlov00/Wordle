@@ -1,4 +1,4 @@
-package wordle;
+package wordle.game.interfaceNotations;
 
 /**
  * Реализация интерфеса положения букв в слове для YNX символов

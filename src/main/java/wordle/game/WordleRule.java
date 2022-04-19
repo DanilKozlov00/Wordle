@@ -1,4 +1,7 @@
-package wordle;
+package wordle.game;
+
+import wordle.dictionary.Dictionary;
+import wordle.game.interfaceNotations.CharactersIndicators;
 
 import java.util.AbstractMap;
 import java.util.LinkedList;

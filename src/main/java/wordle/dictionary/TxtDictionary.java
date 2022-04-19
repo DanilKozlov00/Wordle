@@ -1,4 +1,4 @@
-package wordle;
+package wordle.dictionary;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

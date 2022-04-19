@@ -1,4 +1,4 @@
-package wordle;
+package wordle.game;
 
 /**
  * Класс игры Wordle
