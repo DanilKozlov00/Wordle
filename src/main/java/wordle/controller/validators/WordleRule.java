@@ -71,7 +71,7 @@ public class WordleRule {
      * @return - true, если значение шага не превышает лимит шагов, иначе false
      */
     public boolean isValidStep(int step) {
-        return step > MAX_STEPS;
+        return step >= MAX_STEPS;
     }
 
 }

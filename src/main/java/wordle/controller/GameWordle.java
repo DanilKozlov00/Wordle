@@ -13,7 +13,7 @@ public class GameWordle {
     private final WordleRule gameRule;
 
     private String hiddenWord;
-    private int countSteps = 0;
+    private int countSteps = 1;
 
     public GameWordle(WordleRule gameRule, String hiddenWord) {
         this.gameRule = gameRule;
@@ -53,7 +53,7 @@ public class GameWordle {
      * Перезапускает игру с новым загаданным словом
      */
     public void restartGame() throws IOException {
-        countSteps = 0;
+        countSteps = 1;
         hiddenWord = gameRule.getRuleDictionary().readRandomWord();
     }
 
