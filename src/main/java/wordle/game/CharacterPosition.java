@@ -1,5 +1,9 @@
 package wordle.game;
 
+/**
+ * Перечесление для обозначения позиции символа в слове
+ */
+
 public enum CharacterPosition {
 
     CORRECT_POSITION("Y"),
@@ -8,6 +12,9 @@ public enum CharacterPosition {
 
     private final String indicator;
 
+    /**
+     * @return строка индикации положения символа в слове
+     */
     public String getIndicator() {
         return indicator;
     }
