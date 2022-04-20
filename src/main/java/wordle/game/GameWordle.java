@@ -1,5 +1,7 @@
 package wordle.game;
 
+import java.io.IOException;
+
 /**
  * Класс игры Wordle
  * Отвечает за состояние игры
@@ -16,7 +18,7 @@ public class GameWordle {
         this.hiddenWord = hiddenWord;
     }
 
-    public GameWordle(WordleRule gameRule) {
+    public GameWordle(WordleRule gameRule) throws IOException {
         this(gameRule, gameRule.getRuleDictionary().readRandomWord());
     }
 
@@ -48,7 +50,7 @@ public class GameWordle {
     /**
      * Перезапускает игру с новым загаданным словом
      */
-    public void restartGame() {
+    public void restartGame() throws IOException {
         countSteps = 0;
         hiddenWord = gameRule.getRuleDictionary().readRandomWord();
     }

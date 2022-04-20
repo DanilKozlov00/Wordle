@@ -2,6 +2,7 @@ package wordle.game;
 
 import wordle.dictionary.Dictionary;
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class WordleRule {
 
-    private static final int WORD_LENGTH = 5;
+    public static final int WORD_LENGTH = 5;
     private static final int MAX_STEPS = 6;
     private final Dictionary dictionary;
 
@@ -30,7 +31,7 @@ public class WordleRule {
      * @param hiddenWord - загаданное слово
      * @return - возвращает список пар<Символ, Положение в слове>
      */
-    public List<AbstractMap.SimpleEntry<Character, CharacterPosition>> checkCharactersPosition(String inputWord, String hiddenWord) {
+    public List<AbstractMap.SimpleEntry<Character, CharacterPosition>> checkCharactersPosition(String inputWord, String hiddenWord) throws IOException {
         List<AbstractMap.SimpleEntry<Character, CharacterPosition>> result = new LinkedList<>();
         if (isCorrectWord(inputWord)) {
             for (int i = 0; i < inputWord.length(); i++) {
@@ -55,7 +56,7 @@ public class WordleRule {
      * @param inputWord - слово введеное пользователем
      * @return - соответствует ли слово правилам игры
      */
-    public boolean isCorrectWord(String inputWord) {
+    public boolean isCorrectWord(String inputWord) throws IOException {
         if (inputWord.length() != WORD_LENGTH) {
             return false;
         }

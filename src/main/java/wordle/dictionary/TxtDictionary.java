@@ -1,75 +1,76 @@
 package wordle.dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- * Реализация тестового словаря
+ * Реализация текстового словаря
  */
 public class TxtDictionary implements Dictionary {
 
+    private static final int DEFAULT_PAGE_SIZE = 1000;
+
     private final String dictionaryFileName;
-    private int defaultPageSize = 1000;
 
     public TxtDictionary(String dictionaryFileName) {
         this.dictionaryFileName = dictionaryFileName;
     }
 
-    /**
-     * Сеттер
-     *
-     * @param defaultPageSize - кол-во считываемых строк при чтении словаря
-     */
-    public void setDefaultPageSize(int defaultPageSize) {
-        this.defaultPageSize = defaultPageSize;
+    @Override
+    public String readRandomWord() throws IOException {
+        int countFileLine = getCountFileLines();
+        int randomWordLine = new Random().nextInt(countFileLine);
+        int randomWordPage = randomWordLine / DEFAULT_PAGE_SIZE;
+        return readPage(randomWordLine / DEFAULT_PAGE_SIZE).get(randomWordLine - DEFAULT_PAGE_SIZE * randomWordPage);
     }
 
     @Override
-    public String readRandomWord() {
-        List<String> allWords = readDictionary();
-        return allWords.get(new Random().nextInt(allWords.size()));
-    }
-
-    @Override
-    public boolean containsWord(String word) {
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.equals(word)) {
-                    return true;
-                }
+    public boolean containsWord(String word) throws IOException {
+        int currentPage = 0;
+        List<String> currentPageWords;
+        while (!(currentPageWords = readPage(currentPage)).isEmpty()) {
+            currentPage++;
+            if (currentPageWords.contains(word)) {
+                return true;
             }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
         }
         return false;
     }
 
-    /**
-     * Метод считывания из словаря
-     *
-     * @return возвращает список слов словаря
-     */
-    private List<String> readDictionary() {
-        List<String> allWords = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null || allWords.size() <= defaultPageSize) {
-                allWords.add(line);
+    private List<String> readPage(int page) throws IOException {
+        BufferedReader reader = getReader();
+        int currentPage = 0;
+        int readWords = 0;
+        while (reader.readLine() != null && currentPage != page) {
+            readWords++;
+            if (readWords == DEFAULT_PAGE_SIZE) {
+                readWords = 0;
+                currentPage++;
             }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
         }
-        return allWords;
+        List<String> pageWords = new ArrayList<>();
+        String line;
+        if (currentPage == page) {
+            while ((line = reader.readLine()) != null && pageWords.size() != DEFAULT_PAGE_SIZE) {
+                pageWords.add(line);
+            }
+        }
+        return pageWords;
+    }
+
+    private BufferedReader getReader() throws FileNotFoundException {
+        return new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8));
+    }
+
+    private int getCountFileLines() throws IOException {
+        BufferedReader reader = getReader();
+        int count = 0;
+        while (reader.readLine() != null) {
+            count++;
+        }
+        return count;
     }
 }
