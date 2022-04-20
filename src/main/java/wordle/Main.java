@@ -9,6 +9,8 @@ import wordle.game.WordleRule;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static wordle.Constants.*;
+
 public class Main {
 
     public static final String ENGLISH_TXT_DICTIONARY_PATH = "src/main/resources/dictionaries/dictionary.txt";
@@ -21,9 +23,9 @@ public class Main {
             WordleInterface wordleInterface = new WordleInterface(gameWordle);
             wordleInterface.startGame();
         } catch (FileNotFoundException fileNotFoundException) {
-            System.err.println("Dictionary file not found");
+            System.err.println(FILE_NOT_FOUND);
         } catch (IOException ioException) {
-            System.err.println("Error while reading while");
+            System.err.println(ERROR_WHILE_READING_FILE);
         }
     }
 }

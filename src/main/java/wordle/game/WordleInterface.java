@@ -6,6 +6,8 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static wordle.Constants.*;
+
 /**
  * Класс отвечает за взаимодействие игры с пользователем
  */
@@ -60,9 +62,9 @@ public class WordleInterface {
                 }
             } while (!inputWord.equals(EXIT));
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println("Dictionary file not found");
+            System.out.println(FILE_NOT_FOUND);
         } catch (IOException ioException) {
-            System.out.println("Error while reading dictionary file");
+            System.out.println(ERROR_WHILE_READING_FILE);
         }
     }
 
