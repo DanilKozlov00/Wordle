@@ -28,7 +28,7 @@ public class WordleInterface {
     private static final String END_GAME_MESSAGE = "Print 'start' to restart game or 'exit' to exit";
     private static final String EMPTY_STRING = "";
     private static final String SPACE_STRING = " ";
-    private static final String[] INTERFACE_INFO = {"\nThe '", "' character indicates that you picked", " the right letter but it’s in the wrong spot.", " the right letter in the correct spot", " the letter is not included in the word at all."};
+    private static final String[] INTERFACE_INFO = {"\nThe '", "' character indicates that you picked", " the right letter but its in the wrong spot.", " the right letter in the correct spot", " the letter is not included in the word at all."};
 
     private GameWordle gameWordle;
 
