@@ -1,6 +1,7 @@
-package wordle.game;
+package wordle.controller.validators;
 
-import wordle.dictionary.Dictionary;
+import wordle.model.Dictionary;
+import wordle.view.CharacterPosition;
 
 import java.io.IOException;
 import java.util.AbstractMap;

@@ -1,4 +1,6 @@
-package wordle.game;
+package wordle.controller;
+
+import wordle.controller.validators.WordleRule;
 
 import java.io.IOException;
 

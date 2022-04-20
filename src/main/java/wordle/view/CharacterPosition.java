@@ -1,4 +1,4 @@
-package wordle.game;
+package wordle.view;
 
 /**
  * Перечесление для обозначения позиции символа в слове

@@ -2,9 +2,9 @@
 //
 //import org.junit.jupiter.params.ParameterizedTest;
 //import org.junit.jupiter.params.provider.CsvFileSource;
-//import wordle.dictionary.TxtDictionary;
+//import wordle.model.TxtDictionary;
 //import wordle.game.GameWordle;
-//import wordle.game.WordleInterface;
+//import wordle.view.WordleInterface;
 //import wordle.game.WordleRule;
 //import wordle.game.interfaceNotations.CharactersIndicators;
 //import wordle.game.interfaceNotations.CharactersIndicatorsImpl;

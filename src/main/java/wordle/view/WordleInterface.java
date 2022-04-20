@@ -1,4 +1,7 @@
-package wordle.game;
+package wordle.view;
+
+import wordle.controller.GameWordle;
+import wordle.controller.validators.WordleRule;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,7 +9,7 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Scanner;
 
-import static wordle.Constants.*;
+import static wordle.utils.Constants.*;
 
 /**
  * Класс отвечает за взаимодействие игры с пользователем
@@ -20,7 +23,7 @@ public class WordleInterface {
     private static final String GAME_LOSE = "Game is lose";
     private static final String START = "start";
     private static final String EXIT = "exit";
-    private static final String INPUT_WORD = "Введите слово: ";
+    private static final String INPUT_WORD = "Enter word: ";
     private static final String HIDDEN_WORD = "Hidden word: ";
     private static final String END_GAME_MESSAGE = "Print 'start' to restart game or 'exit' to exit";
     private static final String EMPTY_STRING = "";

@@ -1,15 +1,15 @@
 package wordle;
 
-import wordle.dictionary.Dictionary;
-import wordle.dictionary.TxtDictionary;
-import wordle.game.GameWordle;
-import wordle.game.WordleInterface;
-import wordle.game.WordleRule;
+import wordle.model.Dictionary;
+import wordle.model.TxtDictionary;
+import wordle.controller.GameWordle;
+import wordle.view.WordleInterface;
+import wordle.controller.validators.WordleRule;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static wordle.Constants.*;
+import static wordle.utils.Constants.*;
 
 public class Main {
 

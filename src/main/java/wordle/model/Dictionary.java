@@ -1,7 +1,6 @@
-package wordle.dictionary;
+package wordle.model;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Интерфейс словаря

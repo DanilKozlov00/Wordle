@@ -1,4 +1,4 @@
-package wordle;
+package wordle.utils;
 
 public class Constants {
     public static final String FILE_NOT_FOUND = "Dictionary file not found";

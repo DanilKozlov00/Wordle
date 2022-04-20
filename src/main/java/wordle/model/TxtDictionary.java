@@ -1,4 +1,4 @@
-package wordle.dictionary;
+package wordle.model;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
