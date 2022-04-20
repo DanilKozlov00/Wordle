@@ -5,8 +5,6 @@ import wordle.dictionary.TxtDictionary;
 import wordle.game.GameWordle;
 import wordle.game.WordleInterface;
 import wordle.game.WordleRule;
-import wordle.game.interfaceNotations.CharactersIndicators;
-import wordle.game.interfaceNotations.CharactersIndicatorsImpl;
 
 public class Main {
 
@@ -16,8 +14,7 @@ public class Main {
         Dictionary dictionary = new TxtDictionary(ENGLISH_TXT_DICTIONARY_PATH);
         WordleRule gameRule = new WordleRule(dictionary);
         GameWordle gameWordle = new GameWordle(gameRule);
-        CharactersIndicators charactersIndicators = new CharactersIndicatorsImpl();
-        WordleInterface wordleInterface = new WordleInterface(gameWordle, charactersIndicators);
+        WordleInterface wordleInterface = new WordleInterface(gameWordle);
         wordleInterface.startGame();
     }
 }

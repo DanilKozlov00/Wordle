@@ -1,18 +1,18 @@
 package wordle.game;
 
-import wordle.game.interfaceNotations.CharactersIndicators;
-
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Scanner;
-
-import static wordle.game.WordleRule.*;
 
 /**
  * Класс отвечает за взаимодействие игры с пользователем
  */
 public class WordleInterface {
 
+    private static final String INCORRECT_WORD = "Incorrect word";
+    private static final String INCORRECT_INPUT = "Incorrect input, try another word!";
+    private static final String GAME_WIN = "Game is win";
+    private static final String GAME_LOSE = "Game is lose";
     private static final String START = "start";
     private static final String EXIT = "exit";
     private static final String INPUT_WORD = "Введите слово: ";
@@ -23,11 +23,9 @@ public class WordleInterface {
     private static final String[] INTERFACE_INFO = {"\nThe '", "' character indicates that you picked", " the right letter but it’s in the wrong spot.", " the right letter in the correct spot", " the letter is not included in the word at all."};
 
     private GameWordle gameWordle;
-    private CharactersIndicators charactersIndicators;
 
-    public WordleInterface(GameWordle gameWordle, CharactersIndicators charactersIndicators) {
+    public WordleInterface(GameWordle gameWordle) {
         this.gameWordle = gameWordle;
-        this.charactersIndicators = charactersIndicators;
     }
 
     /**
@@ -42,7 +40,7 @@ public class WordleInterface {
                 System.out.println(INPUT_WORD);
                 inputWord = scanner.nextLine();
                 stepResult = inputWordStepResult(inputWord);
-                printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord(), charactersIndicators));
+                printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
                 System.out.println(stepResult);
                 if (stepResult.equals(GAME_LOSE)) {
                     System.out.println(HIDDEN_WORD + gameWordle.getHiddenWord());
@@ -57,38 +55,36 @@ public class WordleInterface {
         } while (!inputWord.equals(EXIT));
     }
 
-    /**
-     * Метод отвечает за взаимодействие класса игры и пользователя
-     * Пользователь вводит слово и получает результат по введенному слову
-     */
-    public String inputWordStepResult(String inputWord) {
-        String stepResult = gameWordle.getGameRule().getStepResult(inputWord, gameWordle.getHiddenWord(), gameWordle.getCountSteps());
-        if (!stepResult.equals(INCORRECT_INPUT)) {
-            gameWordle.incrementCountSteps();
+    private String inputWordStepResult(String inputWord) {
+        WordleRule gameRule = gameWordle.getGameRule();
+        if (gameRule.isCorrectWord(inputWord)) {
+            if (gameRule.isValidStep(gameWordle.getCountSteps())) {
+                return GAME_LOSE;
+            }
+            if (!inputWord.equals(gameWordle.getHiddenWord())) {
+                gameWordle.incrementCountSteps();
+                return INCORRECT_WORD;
+            }
+            return GAME_WIN;
+        } else {
+            return INCORRECT_INPUT;
         }
-        return stepResult;
     }
 
-    /**
-     * Метод отображающий положение букв в веденном слове. Корректное место, некорректное место, отсутствует в слове.
-     */
-    private void printCharactersPositions(List<AbstractMap.SimpleEntry<Character, String>> charactersPositionsPairs) {
+    private void printCharactersPositions(List<AbstractMap.SimpleEntry<Character, CharacterPosition>> charactersPositionsPairs) {
         StringBuilder positions = new StringBuilder();
-        for (AbstractMap.SimpleEntry<Character, String> pair : charactersPositionsPairs) {
+        for (AbstractMap.SimpleEntry<Character, CharacterPosition> pair : charactersPositionsPairs) {
             System.out.print(pair.getKey() + SPACE_STRING);
-            positions.append(pair.getValue()).append(SPACE_STRING);
+            positions.append(pair.getValue().getIndicator()).append(SPACE_STRING);
         }
         System.out.println();
         System.out.println(positions);
     }
 
-    /**
-     * @return возвращает обозначения положения букв для данного интерфейса
-     */
     private String getInterfaceNotations() {
-        return INTERFACE_INFO[0] + charactersIndicators.getIncorrectPositionCharacter() + INTERFACE_INFO[1] + INTERFACE_INFO[2] +
-                INTERFACE_INFO[0] + charactersIndicators.getCorrectCharacter() + INTERFACE_INFO[1] + INTERFACE_INFO[3] +
-                INTERFACE_INFO[0] + charactersIndicators.getMissingInWordCharacter() + INTERFACE_INFO[1] + INTERFACE_INFO[4];
+        return INTERFACE_INFO[0] + CharacterPosition.INCORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[2] +
+                INTERFACE_INFO[0] + CharacterPosition.CORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[3] +
+                INTERFACE_INFO[0] + CharacterPosition.MISSING_IN_WORD.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[4];
     }
 
 }
