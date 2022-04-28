@@ -2,14 +2,11 @@ package wordle.view;
 
 import wordle.controller.GameWordle;
 import wordle.controller.validators.WordleRule;
+import wordle.utils.exceptions.GameException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Scanner;
-
-import static wordle.utils.Constants.*;
 
 /**
  * Класс отвечает за взаимодействие игры с пользователем
@@ -30,7 +27,7 @@ public class WordleInterface {
     private static final String SPACE_STRING = " ";
     private static final String[] INTERFACE_INFO = {"\nThe '", "' character indicates that you picked", " the right letter but its in the wrong spot.", " the right letter in the correct spot", " the letter is not included in the word at all."};
 
-    private GameWordle gameWordle;
+    private final GameWordle gameWordle;
 
     public WordleInterface(GameWordle gameWordle) {
         this.gameWordle = gameWordle;
@@ -40,38 +37,47 @@ public class WordleInterface {
      * Метод старта игры. Отвечает за общение игры с пользователем
      */
     public void startGame() {
+
+        try {
+            gameWordle.startGame();
+        } catch (GameException gameException) {
+            gameException.printStackTrace();
+            return;
+        }
+
         Scanner scanner = new Scanner(System.in);
         String stepResult = EMPTY_STRING, inputWord;
         System.out.println(getInterfaceNotations());
-        try {
-            do {
-                while (!stepResult.equals(GAME_LOSE) && !stepResult.equals(GAME_WIN)) {
-                    System.out.println(INPUT_WORD);
-                    inputWord = scanner.nextLine();
-                    stepResult = inputWordStepResult(inputWord);
-                    if (!stepResult.equals(INCORRECT_WORD_LENGTH) && !stepResult.equals(INCORRECT_INPUT)) {
-                        printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
-                    }
-                    System.out.println(stepResult);
-                    if (stepResult.equals(GAME_LOSE)) {
-                        System.out.println(HIDDEN_WORD + gameWordle.getHiddenWord());
-                    }
-                }
-                System.out.println(END_GAME_MESSAGE);
+
+
+        do {
+            while (!stepResult.equals(GAME_LOSE) && !stepResult.equals(GAME_WIN)) {
+                System.out.println(INPUT_WORD);
                 inputWord = scanner.nextLine();
-                if (inputWord.equals(START)) {
-                    gameWordle.restartGame();
-                    stepResult = EMPTY_STRING;
+                stepResult = inputWordStepResult(inputWord);
+                if (!stepResult.equals(INCORRECT_WORD_LENGTH) && !stepResult.equals(INCORRECT_INPUT)) {
+                    printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
                 }
-            } while (!inputWord.equals(EXIT));
-        } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println(FILE_NOT_FOUND);
-        } catch (IOException ioException) {
-            System.out.println(ERROR_WHILE_READING_FILE);
-        }
+                System.out.println(stepResult);
+                if (stepResult.equals(GAME_LOSE)) {
+                    System.out.println(HIDDEN_WORD + gameWordle.getHiddenWord());
+                }
+            }
+            System.out.println(END_GAME_MESSAGE);
+            inputWord = scanner.nextLine();
+            if (inputWord.equals(START)) {
+                try {
+                    gameWordle.restartGame();
+                } catch (GameException gameException) {
+                    gameException.printStackTrace();
+                    return;
+                }
+                stepResult = EMPTY_STRING;
+            }
+        } while (!inputWord.equals(EXIT));
     }
 
-    private String inputWordStepResult(String inputWord) throws IOException {
+    private String inputWordStepResult(String inputWord) {
         WordleRule gameRule = gameWordle.getGameRule();
         if (gameRule.isCorrectWord(inputWord)) {
             if (gameRule.isValidStep(gameWordle.getCountSteps())) {
@@ -101,9 +107,7 @@ public class WordleInterface {
     }
 
     private String getInterfaceNotations() {
-        return INTERFACE_INFO[0] + CharacterPosition.INCORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[2] +
-                INTERFACE_INFO[0] + CharacterPosition.CORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[3] +
-                INTERFACE_INFO[0] + CharacterPosition.MISSING_IN_WORD.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[4];
+        return INTERFACE_INFO[0] + CharacterPosition.INCORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[2] + INTERFACE_INFO[0] + CharacterPosition.CORRECT_POSITION.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[3] + INTERFACE_INFO[0] + CharacterPosition.MISSING_IN_WORD.getIndicator() + INTERFACE_INFO[1] + INTERFACE_INFO[4];
     }
 
 }

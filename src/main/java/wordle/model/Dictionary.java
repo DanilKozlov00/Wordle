@@ -1,6 +1,6 @@
 package wordle.model;
 
-import java.io.IOException;
+import wordle.utils.exceptions.GameException;
 
 /**
  * Интерфейс словаря
@@ -11,10 +11,11 @@ public interface Dictionary {
      * @param word - слово для поиска
      * @return находится ли слово в словаре
      */
-    boolean containsWord(String word) throws IOException;
+    boolean containsWord(String word);
 
     /**
      * @return случайное слово из словаря
+     * @exception - ошибка чтения из словаря
      */
-    String readRandomWord() throws IOException;
+    String readRandomWord() throws GameException;
 }

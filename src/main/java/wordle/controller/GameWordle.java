@@ -1,6 +1,7 @@
 package wordle.controller;
 
 import wordle.controller.validators.WordleRule;
+import wordle.utils.exceptions.GameException;
 
 import java.io.IOException;
 
@@ -15,13 +16,12 @@ public class GameWordle {
     private String hiddenWord;
     private int countSteps = 1;
 
-    public GameWordle(WordleRule gameRule, String hiddenWord) {
+    public GameWordle(WordleRule gameRule) {
         this.gameRule = gameRule;
-        this.hiddenWord = hiddenWord;
     }
 
-    public GameWordle(WordleRule gameRule) throws IOException {
-        this(gameRule, gameRule.getRuleDictionary().readRandomWord());
+    public void startGame() throws GameException {
+        this.hiddenWord = gameRule.getRuleDictionary().readRandomWord();
     }
 
     /**
@@ -52,7 +52,7 @@ public class GameWordle {
     /**
      * Перезапускает игру с новым загаданным словом
      */
-    public void restartGame() throws IOException {
+    public void restartGame() throws GameException {
         countSteps = 1;
         hiddenWord = gameRule.getRuleDictionary().readRandomWord();
     }
