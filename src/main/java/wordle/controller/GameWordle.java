@@ -1,5 +1,7 @@
 package wordle.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import wordle.controller.validators.WordleRule;
 import wordle.utils.exceptions.GameException;
 
@@ -7,6 +9,7 @@ import wordle.utils.exceptions.GameException;
  * Класс игры Wordle
  * Отвечает за состояние игры
  */
+@Component
 public class GameWordle {
 
     private final WordleRule gameRule;
@@ -14,6 +17,7 @@ public class GameWordle {
     private String hiddenWord;
     private int countSteps = 1;
 
+    @Autowired
     public GameWordle(WordleRule gameRule) {
         this.gameRule = gameRule;
     }
