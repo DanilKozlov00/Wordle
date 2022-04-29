@@ -1,5 +1,7 @@
 package wordle.view;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import wordle.controller.GameWordle;
 import wordle.controller.validators.WordleRule;
 import wordle.utils.exceptions.GameException;
@@ -11,6 +13,7 @@ import java.util.Scanner;
 /**
  * Класс отвечает за взаимодействие игры с пользователем
  */
+@Component
 public class WordleInterface {
 
     private static final String INCORRECT_WORD = "Incorrect word";
@@ -31,8 +34,9 @@ public class WordleInterface {
     private static final String CORRECT_POS_CHAR_INFO = " the right letter in the correct spot";
     private static final String MISSING_CHAR_INFO = " the letter is not included in the word at all.";
 
-    private final GameWordle gameWordle;
+    private GameWordle gameWordle;
 
+    @Autowired
     public WordleInterface(GameWordle gameWordle) {
         this.gameWordle = gameWordle;
     }

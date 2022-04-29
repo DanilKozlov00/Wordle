@@ -1,5 +1,7 @@
 package wordle.controller.validators;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import wordle.model.Dictionary;
 import wordle.view.CharacterPosition;
 
@@ -10,12 +12,14 @@ import java.util.List;
 /**
  * Класс отвечающий за проверку вводимых пользователем слов правилам игры
  */
+@Component
 public class WordleRule {
 
     public static final int WORD_LENGTH = 5;
     private static final int MAX_STEPS = 6;
     private final Dictionary dictionary;
 
+    @Autowired
     public WordleRule(Dictionary dictionary) {
         this.dictionary = dictionary;
     }

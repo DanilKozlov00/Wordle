@@ -1,5 +1,8 @@
 package wordle.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import wordle.utils.exceptions.GameException;
 import wordle.view.WordleInterface;
 
@@ -9,18 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static wordle.Main.ENGLISH_TXT_DICTIONARY_PATH;
 import static wordle.utils.Constants.*;
 
 /**
  * Реализация текстового словаря
  */
+@Component
 public class TxtDictionary implements Dictionary {
 
     private static final int DEFAULT_PAGE_SIZE = 1000;
 
     private final String dictionaryFileName;
 
-    public TxtDictionary(String dictionaryFileName) {
+    @Autowired
+    public TxtDictionary(@Value(ENGLISH_TXT_DICTIONARY_PATH) String dictionaryFileName) {
         this.dictionaryFileName = dictionaryFileName;
     }
 
