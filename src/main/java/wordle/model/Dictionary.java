@@ -11,11 +11,11 @@ public interface Dictionary {
      * @param word - слово для поиска
      * @return находится ли слово в словаре
      */
-    boolean containsWord(String word);
+    boolean isContainsWord(String word);
 
     /**
      * @return случайное слово из словаря
      * @exception - ошибка чтения из словаря
      */
-    String readRandomWord() throws GameException;
+    String getRandomWord() throws GameException;
 }

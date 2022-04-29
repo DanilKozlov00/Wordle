@@ -3,7 +3,6 @@ package wordle.controller.validators;
 import wordle.model.Dictionary;
 import wordle.view.CharacterPosition;
 
-import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +60,7 @@ public class WordleRule {
         if (inputWord.length() != WORD_LENGTH) {
             return false;
         }
-        return dictionary.containsWord(inputWord.toLowerCase());
+        return dictionary.isContainsWord(inputWord.toLowerCase());
     }
 
     /**
@@ -70,7 +69,7 @@ public class WordleRule {
      * @param step - значение текущего шага
      * @return - true, если значение шага не превышает лимит шагов, иначе false
      */
-    public boolean isValidStep(int step) {
+    public boolean isInvalidStep(int step) {
         return step >= MAX_STEPS;
     }
 

@@ -1,1 +1,1 @@
-mvn compile exec:java -Dexec.mainClass="wordle.Main"
+mvn clean package exec:java -Dexec.mainClass="wordle.Main"

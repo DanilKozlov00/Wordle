@@ -3,8 +3,6 @@ package wordle.controller;
 import wordle.controller.validators.WordleRule;
 import wordle.utils.exceptions.GameException;
 
-import java.io.IOException;
-
 /**
  * Класс игры Wordle
  * Отвечает за состояние игры
@@ -21,7 +19,7 @@ public class GameWordle {
     }
 
     public void startGame() throws GameException {
-        this.hiddenWord = gameRule.getRuleDictionary().readRandomWord();
+        this.hiddenWord = gameRule.getRuleDictionary().getRandomWord();
     }
 
     /**
@@ -54,7 +52,7 @@ public class GameWordle {
      */
     public void restartGame() throws GameException {
         countSteps = 1;
-        hiddenWord = gameRule.getRuleDictionary().readRandomWord();
+        hiddenWord = gameRule.getRuleDictionary().getRandomWord();
     }
 
     /**

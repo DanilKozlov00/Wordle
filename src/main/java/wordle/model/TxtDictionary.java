@@ -1,6 +1,7 @@
 package wordle.model;
 
 import wordle.utils.exceptions.GameException;
+import wordle.view.WordleInterface;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +25,7 @@ public class TxtDictionary implements Dictionary {
     }
 
     @Override
-    public String readRandomWord() throws GameException {
+    public String getRandomWord() throws GameException {
         int countFileLine = getCountFileLines();
         if (countFileLine == 0) {
             throw new GameException(DICTIONARY_IS_EMPTY);
@@ -35,7 +36,7 @@ public class TxtDictionary implements Dictionary {
     }
 
     @Override
-    public boolean containsWord(String word) {
+    public boolean isContainsWord(String word) {
         int currentPage = 0;
         List<String> currentPageWords;
         while (!(currentPageWords = readPage(currentPage)).isEmpty()) {
@@ -49,32 +50,30 @@ public class TxtDictionary implements Dictionary {
 
     private List<String> readPage(int page) {
         List<String> pageWords = new ArrayList<>();
-        try {
-            BufferedReader reader = getReader();
-            try (reader) {
-                int currentPage = 0;
-                int readWords = 0;
-                while (reader.readLine() != null && currentPage != page) {
-                    readWords++;
-                    if (readWords == DEFAULT_PAGE_SIZE) {
-                        readWords = 0;
-                        currentPage++;
-                    }
+        try (BufferedReader reader = getReader()) {
+            int currentPage = 0;
+            int readWords = 0;
+            while (reader.readLine() != null && currentPage != page) {
+                readWords++;
+                if (readWords == DEFAULT_PAGE_SIZE) {
+                    readWords = 0;
+                    currentPage++;
                 }
-                String line;
-                if (currentPage == page) {
-                    while ((line = reader.readLine()) != null && pageWords.size() != DEFAULT_PAGE_SIZE) {
-                        pageWords.add(line);
-                    }
+            }
+            String line;
+            if (currentPage == page) {
+                while ((line = reader.readLine()) != null && pageWords.size() != DEFAULT_PAGE_SIZE) {
+                    pageWords.add(line);
                 }
-            } catch (IOException ioException) {
-                System.err.println(ERROR_WHILE_READING_FILE);
-                ioException.printStackTrace();
             }
         } catch (FileNotFoundException fileNotFoundException) {
-            System.err.println(FILE_NOT_FOUND);
+            WordleInterface.printException(FILE_NOT_FOUND);
             fileNotFoundException.printStackTrace();
+        } catch (IOException ioException) {
+            WordleInterface.printException(ERROR_WHILE_READING_FILE);
+            ioException.printStackTrace();
         }
+
         return pageWords;
     }
 
@@ -83,22 +82,20 @@ public class TxtDictionary implements Dictionary {
     }
 
     private int getCountFileLines() {
-        try {
-            BufferedReader reader = getReader();
-            try (reader) {
-                int count = 0;
-                while (reader.readLine() != null) {
-                    count++;
-                }
-                return count;
-            } catch (IOException ioException) {
-                System.err.println(ERROR_WHILE_READING_FILE);
-                ioException.printStackTrace();
+        try (BufferedReader reader = getReader()) {
+            int count = 0;
+            while (reader.readLine() != null) {
+                count++;
             }
+            return count;
         } catch (FileNotFoundException fileNotFoundException) {
-            System.err.println(FILE_NOT_FOUND);
+            WordleInterface.printException(FILE_NOT_FOUND);
             fileNotFoundException.printStackTrace();
+        } catch (IOException ioException) {
+            WordleInterface.printException(ERROR_WHILE_READING_FILE);
+            ioException.printStackTrace();
         }
+
         return 0;
     }
 }
