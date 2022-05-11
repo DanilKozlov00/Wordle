@@ -42,7 +42,7 @@ public class TxtDictionary implements Dictionary {
     }
 
     @Override
-    public boolean isContainsWord(String word) {
+    public boolean isContainsWord(String word) throws GameException {
         int currentPage = 0;
         List<String> currentPageWords;
         while (!(currentPageWords = readPage(currentPage)).isEmpty()) {
@@ -54,7 +54,7 @@ public class TxtDictionary implements Dictionary {
         return false;
     }
 
-    private List<String> readPage(int page) {
+    private List<String> readPage(int page) throws GameException {
         List<String> pageWords = new ArrayList<>();
         try (BufferedReader reader = getReader()) {
             int currentPage = 0;
@@ -73,11 +73,9 @@ public class TxtDictionary implements Dictionary {
                 }
             }
         } catch (FileNotFoundException fileNotFoundException) {
-            WordleInterface.printException(FILE_NOT_FOUND);
-            fileNotFoundException.printStackTrace();
+            throw new GameException(FILE_NOT_FOUND);
         } catch (IOException ioException) {
-            WordleInterface.printException(ERROR_WHILE_READING_FILE);
-            ioException.printStackTrace();
+            throw new GameException(ERROR_WHILE_READING_FILE);
         }
 
         return pageWords;
@@ -87,7 +85,7 @@ public class TxtDictionary implements Dictionary {
         return new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8));
     }
 
-    private int getCountFileLines() {
+    private int getCountFileLines() throws GameException {
         try (BufferedReader reader = getReader()) {
             int count = 0;
             while (reader.readLine() != null) {
@@ -95,13 +93,9 @@ public class TxtDictionary implements Dictionary {
             }
             return count;
         } catch (FileNotFoundException fileNotFoundException) {
-            WordleInterface.printException(FILE_NOT_FOUND);
-            fileNotFoundException.printStackTrace();
+            throw new GameException(FILE_NOT_FOUND);
         } catch (IOException ioException) {
-            WordleInterface.printException(ERROR_WHILE_READING_FILE);
-            ioException.printStackTrace();
+            throw new GameException(ERROR_WHILE_READING_FILE);
         }
-
-        return 0;
     }
 }

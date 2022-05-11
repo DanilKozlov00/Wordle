@@ -34,15 +34,11 @@ public class WordleInterface {
     private static final String CORRECT_POS_CHAR_INFO = " the right letter in the correct spot";
     private static final String MISSING_CHAR_INFO = " the letter is not included in the word at all.";
 
-    private GameWordle gameWordle;
+    private final GameWordle gameWordle;
 
     @Autowired
     public WordleInterface(GameWordle gameWordle) {
         this.gameWordle = gameWordle;
-    }
-
-    public static void printException(String message) {
-        System.err.println(message);
     }
 
     /**
@@ -67,8 +63,12 @@ public class WordleInterface {
                 System.out.println(INPUT_WORD);
                 inputWord = scanner.nextLine();
                 stepResult = inputWordStepResult(inputWord);
-                if (!stepResult.equals(INCORRECT_WORD_LENGTH) && !stepResult.equals(INCORRECT_INPUT)) {
-                    printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
+                try {
+                    if (!stepResult.equals(INCORRECT_WORD_LENGTH) && !stepResult.equals(INCORRECT_INPUT)) {
+                        printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
+                    }
+                } catch (GameException gameException) {
+                    System.err.println(gameException.getMessage());
                 }
                 System.out.println(stepResult);
                 if (stepResult.equals(GAME_LOSE)) {
@@ -91,20 +91,25 @@ public class WordleInterface {
 
     private String inputWordStepResult(String inputWord) {
         WordleRule gameRule = gameWordle.getGameRule();
-        if (gameRule.isCorrectWord(inputWord)) {
-            if (gameRule.isInvalidStep(gameWordle.getCountSteps())) {
-                return GAME_LOSE;
+        try {
+            if (gameRule.isCorrectWord(inputWord)) {
+                if (gameRule.isInvalidStep(gameWordle.getCountSteps())) {
+                    return GAME_LOSE;
+                }
+                if (!inputWord.equals(gameWordle.getHiddenWord())) {
+                    gameWordle.incrementCountSteps();
+                    return INCORRECT_WORD;
+                }
+                return GAME_WIN;
+            } else {
+                if (inputWord.length() != WordleRule.WORD_LENGTH) {
+                    return INCORRECT_WORD_LENGTH;
+                }
+                return INCORRECT_INPUT;
             }
-            if (!inputWord.equals(gameWordle.getHiddenWord())) {
-                gameWordle.incrementCountSteps();
-                return INCORRECT_WORD;
-            }
-            return GAME_WIN;
-        } else {
-            if (inputWord.length() != WordleRule.WORD_LENGTH) {
-                return INCORRECT_WORD_LENGTH;
-            }
-            return INCORRECT_INPUT;
+        } catch (GameException gameException) {
+            System.err.println(gameException.getMessage());
+            return GAME_LOSE;
         }
     }
 
@@ -119,9 +124,7 @@ public class WordleInterface {
     }
 
     private String getInterfaceNotations() {
-        return  THE + CharacterPosition.INCORRECT_POSITION.getIndicator() + CHARACTER_PICKED + INCORRECT_POS_CHAR_INFO +
-                THE + CharacterPosition.CORRECT_POSITION.getIndicator() + CHARACTER_PICKED + CORRECT_POS_CHAR_INFO +
-                THE + CharacterPosition.MISSING_IN_WORD.getIndicator() + CHARACTER_PICKED + MISSING_CHAR_INFO;
+        return THE + CharacterPosition.INCORRECT_POSITION.getIndicator() + CHARACTER_PICKED + INCORRECT_POS_CHAR_INFO + THE + CharacterPosition.CORRECT_POSITION.getIndicator() + CHARACTER_PICKED + CORRECT_POS_CHAR_INFO + THE + CharacterPosition.MISSING_IN_WORD.getIndicator() + CHARACTER_PICKED + MISSING_CHAR_INFO;
     }
 
 }

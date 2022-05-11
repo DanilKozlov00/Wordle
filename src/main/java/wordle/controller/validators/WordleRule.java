@@ -3,6 +3,7 @@ package wordle.controller.validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import wordle.model.Dictionary;
+import wordle.utils.exceptions.GameException;
 import wordle.view.CharacterPosition;
 
 import java.util.AbstractMap;
@@ -35,7 +36,7 @@ public class WordleRule {
      * @param hiddenWord - загаданное слово
      * @return - возвращает список пар<Символ, Положение в слове>
      */
-    public List<AbstractMap.SimpleEntry<Character, CharacterPosition>> checkCharactersPosition(String inputWord, String hiddenWord) {
+    public List<AbstractMap.SimpleEntry<Character, CharacterPosition>> checkCharactersPosition(String inputWord, String hiddenWord) throws GameException {
         List<AbstractMap.SimpleEntry<Character, CharacterPosition>> result = new LinkedList<>();
         if (isCorrectWord(inputWord)) {
             for (int i = 0; i < inputWord.length(); i++) {
@@ -60,7 +61,7 @@ public class WordleRule {
      * @param inputWord - слово введеное пользователем
      * @return - соответствует ли слово правилам игры
      */
-    public boolean isCorrectWord(String inputWord) {
+    public boolean isCorrectWord(String inputWord) throws GameException {
         if (inputWord.length() != WORD_LENGTH) {
             return false;
         }
