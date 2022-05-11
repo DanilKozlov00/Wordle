@@ -3,7 +3,7 @@ package wordle.model;
 import wordle.utils.exceptions.GameException;
 
 /**
- * Интерфейс словаря
+ * интерфейс словаря
  */
 public interface Dictionary {
 
