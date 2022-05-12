@@ -1,2 +1,2 @@
 script:
-  - startLinux.sh
+  - sh startLinux.sh
