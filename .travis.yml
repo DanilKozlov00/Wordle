@@ -1,10 +1,2 @@
 script:
   - sh startLinux.sh
-after_script:
-  - words
-  - leave
-  - mines
-  - lines
-  - times
-  - loves
-  - exit
