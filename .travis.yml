@@ -1,6 +1,6 @@
 script:
   - sh startLinux.sh
-before_script:
+after_script:
   - words
   - leave
   - mines
