@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import wordle.model.Dictionary;
 import wordle.utils.exceptions.GameException;
-import wordle.view.CharacterPosition;
+import wordle.controller.CharacterPosition;
 
 import java.util.AbstractMap;
 import java.util.LinkedList;
