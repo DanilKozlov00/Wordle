@@ -1,2 +1,10 @@
 script:
   - sh startLinux.sh
+before_script:
+  - words
+  - leave
+  - mines
+  - lines
+  - times
+  - loves
+  - exit
