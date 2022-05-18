@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import wordle.utils.exceptions.GameException;
-import wordle.view.WordleInterface;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static wordle.Main.ENGLISH_TXT_DICTIONARY_PATH;
+
 import static wordle.utils.Constants.*;
 
 /**
@@ -26,7 +25,7 @@ public class TxtDictionary implements Dictionary {
     private final String dictionaryFileName;
 
     @Autowired
-    public TxtDictionary(@Value(ENGLISH_TXT_DICTIONARY_PATH) String dictionaryFileName) {
+    public TxtDictionary(@Value("${dictionary.path.ENGLISH_TXT_DICTIONARY_PATH}") String dictionaryFileName) {
         this.dictionaryFileName = dictionaryFileName;
     }
 
