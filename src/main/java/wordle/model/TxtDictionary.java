@@ -3,6 +3,7 @@ package wordle.model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import wordle.utils.Constants;
 import wordle.utils.exceptions.GameException;
 
 import java.io.*;
@@ -11,29 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
-import static wordle.utils.Constants.*;
-
 /**
  * Реализация текстового словаря
  */
 @Component
 public class TxtDictionary implements Dictionary {
 
-    private static final int DEFAULT_PAGE_SIZE = 1000;
+    private final int DEFAULT_PAGE_SIZE;
 
     private final String dictionaryFileName;
+    private final Constants constants;
 
     @Autowired
-    public TxtDictionary(@Value("${dictionary.path.ENGLISH_TXT_DICTIONARY_PATH}") String dictionaryFileName) {
+    public TxtDictionary(@Value("${dictionary.path.ENGLISH_TXT_DICTIONARY_PATH}") String dictionaryFileName,
+                         @Value("${TxtDictionary.DEFAULT_PAGE_SIZE}") int DEFAULT_PAGE_SIZE,
+                         Constants constants) {
         this.dictionaryFileName = dictionaryFileName;
+        this.DEFAULT_PAGE_SIZE = DEFAULT_PAGE_SIZE;
+        this.constants = constants;
     }
 
     @Override
     public String getRandomWord() throws GameException {
         int countFileLine = getCountFileLines();
         if (countFileLine == 0) {
-            throw new GameException(DICTIONARY_IS_EMPTY);
+            throw new GameException(constants.getDICTIONARY_IS_EMPTY());
         }
         int randomWordLine = new Random().nextInt(countFileLine);
         int randomWordPage = randomWordLine / DEFAULT_PAGE_SIZE;
@@ -72,9 +75,9 @@ public class TxtDictionary implements Dictionary {
                 }
             }
         } catch (FileNotFoundException fileNotFoundException) {
-            throw new GameException(FILE_NOT_FOUND);
+            throw new GameException(constants.getFILE_NOT_FOUND());
         } catch (IOException ioException) {
-            throw new GameException(ERROR_WHILE_READING_FILE);
+            throw new GameException(constants.getERROR_WHILE_READING_FILE());
         }
 
         return pageWords;
@@ -92,9 +95,9 @@ public class TxtDictionary implements Dictionary {
             }
             return count;
         } catch (FileNotFoundException fileNotFoundException) {
-            throw new GameException(FILE_NOT_FOUND);
+            throw new GameException(constants.getFILE_NOT_FOUND());
         } catch (IOException ioException) {
-            throw new GameException(ERROR_WHILE_READING_FILE);
+            throw new GameException(constants.getERROR_WHILE_READING_FILE());
         }
     }
 }

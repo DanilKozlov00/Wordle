@@ -14,7 +14,7 @@ public enum CharactersDisplay {
     private static final String THE = "\nThe '";
     private static final String CHARACTER_PICKED = "' character indicates that you picked";
     private static final String INCORRECT_POS_CHAR_INFO = " the right letter but its in the wrong spot.";
-    private static final String CORRECT_POS_CHAR_INFO = " the right letter in the correct spot";
+    private static final String CORRECT_POS_CHAR_INFO = " the right letter in the correct spot.";
     private static final String MISSING_CHAR_INFO = " the letter is not included in the word at all.";
 
     private final String displayIndicator;
