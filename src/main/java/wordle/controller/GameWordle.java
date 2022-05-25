@@ -17,8 +17,7 @@ public class GameWordle {
 
     private String hiddenWord;
 
-    @Value("${GameWordle.countSteps}")
-    private int countSteps;
+    private int countSteps = 1;
 
     @Autowired
     public GameWordle(WordleRule gameRule) {

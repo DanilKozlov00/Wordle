@@ -19,48 +19,24 @@ import java.util.Scanner;
 @Component
 public class WordleInterface {
 
-    private final String INCORRECT_WORD;
-    private final String INCORRECT_WORD_LENGTH;
-    private final String INCORRECT_INPUT;
-    private final String GAME_WIN;
-    private final String GAME_LOSE;
-    private final String START;
-    private final String EXIT;
-    private final String INPUT_WORD;
-    private final String HIDDEN_WORD;
-    private final String END_GAME_MESSAGE;
-    private final String EMPTY_STRING;
-    private final String SPACE_STRING;
+    private static final String INCORRECT_WORD = "Incorrect word";
+    private static final String INCORRECT_WORD_LENGTH = "Incorrect word length";
+    private static final String INCORRECT_INPUT = "This word is not contains in dictionary";
+    private static final String GAME_WIN = "Game is win";
+    private static final String GAME_LOSE = "Game is lose";
+    private static final String START = "start";
+    private static final String EXIT = "exit";
+    private static final String INPUT_WORD = "Enter word:";
+    private static final String HIDDEN_WORD = "Hidden word:";
+    private static final String END_GAME_MESSAGE = "Print 'start' to restart game or 'exit' to exit";
+    private static final String EMPTY_STRING = "";
+    private static final String SPACE_STRING = " ";
 
     private GameWordle gameWordle;
 
     @Autowired
-    public WordleInterface(GameWordle gameWordle,
-                           @Value("${WordleInterface.INCORRECT_WORD}") String INCORRECT_WORD,
-                           @Value("${WordleInterface.INCORRECT_WORD_LENGTH}") String INCORRECT_WORD_LENGTH,
-                           @Value("${WordleInterface.INCORRECT_INPUT}") String INCORRECT_INPUT,
-                           @Value("${WordleInterface.GAME_WIN}") String GAME_WIN,
-                           @Value("${WordleInterface.GAME_LOSE}") String GAME_LOSE,
-                           @Value("${WordleInterface.START}") String START,
-                           @Value("${WordleInterface.EXIT}") String EXIT,
-                           @Value("${WordleInterface.INPUT_WORD}") String INPUT_WORD,
-                           @Value("${WordleInterface.HIDDEN_WORD}") String HIDDEN_WORD,
-                           @Value("${WordleInterface.END_GAME_MESSAGE}") String END_GAME_MESSAGE,
-                           @Value("${WordleInterface.EMPTY_STRING}") String EMPTY_STRING,
-                           @Value("${WordleInterface.SPACE_STRING}") String SPACE_STRING) {
+    public WordleInterface(GameWordle gameWordle){
         this.gameWordle = gameWordle;
-        this.INCORRECT_WORD = INCORRECT_WORD;
-        this.INCORRECT_WORD_LENGTH = INCORRECT_WORD_LENGTH;
-        this.INCORRECT_INPUT = INCORRECT_INPUT;
-        this.GAME_WIN = GAME_WIN;
-        this.GAME_LOSE = GAME_LOSE;
-        this.START = START;
-        this.EXIT = EXIT;
-        this.INPUT_WORD = INPUT_WORD;
-        this.HIDDEN_WORD = HIDDEN_WORD;
-        this.END_GAME_MESSAGE = END_GAME_MESSAGE;
-        this.EMPTY_STRING = EMPTY_STRING;
-        this.SPACE_STRING = SPACE_STRING;
     }
 
     /**

@@ -18,15 +18,13 @@ import java.util.List;
 @Component
 public class WordleRule {
 
-    public final int WORD_LENGTH;
-    private final int MAX_STEPS;
+    public static final int WORD_LENGTH = 5;
+    private static final int MAX_STEPS = 6;
     private final Dictionary dictionary;
 
     @Autowired
-    public WordleRule(Dictionary dictionary, @Value("${WordleRule.WORD_LENGTH}") int WORD_LENGTH,@Value("${WordleRule.MAX_STEPS}") int MAX_STEPS) {
+    public WordleRule(Dictionary dictionary) {
         this.dictionary = dictionary;
-        this.WORD_LENGTH = WORD_LENGTH;
-        this.MAX_STEPS = MAX_STEPS;
     }
 
     public int getWORD_LENGTH() {
