@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import wordle.controller.CharacterPosition;
 import wordle.controller.GameWordle;
 import wordle.controller.validators.WordleRule;
+import wordle.model.WordCharacter;
 import wordle.utils.exceptions.GameException;
 
 import java.util.AbstractMap;
@@ -31,7 +32,7 @@ public class WordleInterface {
     private final String EMPTY_STRING;
     private final String SPACE_STRING;
 
-    private final GameWordle gameWordle;
+    private GameWordle gameWordle;
 
     @Autowired
     public WordleInterface(GameWordle gameWordle,
@@ -134,11 +135,11 @@ public class WordleInterface {
         }
     }
 
-    private void printCharactersPositions(List<AbstractMap.SimpleEntry<Character, CharacterPosition>> charactersPositionsPairs) {
+    private void printCharactersPositions(List<WordCharacter> charactersPositionsPairs) {
         StringBuilder positions = new StringBuilder();
-        for (AbstractMap.SimpleEntry<Character, CharacterPosition> pair : charactersPositionsPairs) {
-            System.out.print(pair.getKey() + SPACE_STRING);
-            positions.append(CharactersDisplay.getCharacterPositionDisplay(pair.getValue())).append(SPACE_STRING);
+        for (WordCharacter pair : charactersPositionsPairs) {
+            System.out.print(pair.getCharacter() + SPACE_STRING);
+            positions.append(CharactersDisplay.getCharacterPositionDisplay(pair.getCharacterPosition())).append(SPACE_STRING);
         }
         System.out.println();
         System.out.println(positions);

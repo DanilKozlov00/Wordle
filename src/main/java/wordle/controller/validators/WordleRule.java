@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import wordle.model.Dictionary;
+import wordle.model.WordCharacter;
 import wordle.utils.exceptions.GameException;
 import wordle.controller.CharacterPosition;
 
@@ -43,19 +44,19 @@ public class WordleRule {
      * @param hiddenWord - загаданное слово
      * @return - возвращает список пар<Символ, Положение в слове>
      */
-    public List<AbstractMap.SimpleEntry<Character, CharacterPosition>> checkCharactersPosition(String inputWord, String hiddenWord) throws GameException {
-        List<AbstractMap.SimpleEntry<Character, CharacterPosition>> result = new LinkedList<>();
+    public List<WordCharacter> checkCharactersPosition(String inputWord, String hiddenWord) throws GameException {
+        List<WordCharacter> result = new LinkedList<>();
         if (isCorrectWord(inputWord)) {
             for (int i = 0; i < inputWord.length(); i++) {
                 char characterToCheck = inputWord.toLowerCase().charAt(i);
                 if (hiddenWord.indexOf(characterToCheck) != -1) {
                     if (hiddenWord.charAt(i) == characterToCheck) {
-                        result.add(new AbstractMap.SimpleEntry<>(characterToCheck, CharacterPosition.CORRECT_POSITION));
+                        result.add(new WordCharacter(characterToCheck, CharacterPosition.CORRECT_POSITION));
                     } else {
-                        result.add(new AbstractMap.SimpleEntry<>(characterToCheck, CharacterPosition.INCORRECT_POSITION));
+                        result.add(new WordCharacter(characterToCheck, CharacterPosition.INCORRECT_POSITION));
                     }
                 } else {
-                    result.add(new AbstractMap.SimpleEntry<>(characterToCheck, CharacterPosition.MISSING_IN_WORD));
+                    result.add(new WordCharacter(characterToCheck, CharacterPosition.MISSING_IN_WORD));
                 }
             }
         }
