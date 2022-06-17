@@ -20,7 +20,7 @@ import static wordle.utils.Constants.*;
 @Component
 public class TxtDictionary implements Dictionary {
 
-    private final int DEFAULT_PAGE_SIZE = 1000;
+    private static final int DEFAULT_PAGE_SIZE = 1000;
 
     private final String dictionaryFileName;
 

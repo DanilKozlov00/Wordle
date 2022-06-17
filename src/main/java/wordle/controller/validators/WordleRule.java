@@ -1,14 +1,12 @@
 package wordle.controller.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import wordle.model.Dictionary;
 import wordle.model.WordCharacter;
 import wordle.utils.exceptions.GameException;
 import wordle.controller.CharacterPosition;
 
-import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import java.util.List;
 @Component
 public class WordleRule {
 
-    public static final int WORD_LENGTH = 5;
+    private static final int WORD_LENGTH = 5;
     private static final int MAX_STEPS = 6;
     private final Dictionary dictionary;
 
@@ -27,7 +25,7 @@ public class WordleRule {
         this.dictionary = dictionary;
     }
 
-    public int getWORD_LENGTH() {
+    public int getWordLength() {
         return WORD_LENGTH;
     }
 
