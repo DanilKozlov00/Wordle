@@ -1,7 +1,12 @@
-package wordle.utils;
+package wordle.model.exceptions;
 
-public class Constants {
+public class GameException extends Exception {
+
     public static final String FILE_NOT_FOUND = "Dictionary file not found";
     public static final String ERROR_WHILE_READING_FILE = "Error while reading while";
     public static final String DICTIONARY_IS_EMPTY = "Dictionary is empty";
+
+    public GameException(String message) {
+        super(message);
+    }
 }

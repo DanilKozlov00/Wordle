@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import wordle.controller.GameWordle;
 import wordle.controller.validators.WordleRule;
-import wordle.model.WordCharacter;
-import wordle.utils.exceptions.GameException;
+import wordle.model.dictionary.WordCharacter;
+import wordle.model.exceptions.GameException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,20 +16,21 @@ import java.util.Scanner;
 @Component
 public class WordleInterface {
 
-    private static final String INCORRECT_WORD = "Incorrect word";
-    private static final String INCORRECT_WORD_LENGTH = "Incorrect word length";
-    private static final String INCORRECT_INPUT = "This word is not contains in dictionary";
-    private static final String GAME_WIN = "Game is win";
-    private static final String GAME_LOSE = "Game is lose";
-    private static final String START = "start";
-    private static final String EXIT = "exit";
-    private static final String INPUT_WORD = "Enter word:";
-    private static final String HIDDEN_WORD = "Hidden word:";
-    private static final String END_GAME_MESSAGE = "Print 'start' to restart game or 'exit' to exit";
-    private static final String EMPTY_STRING = "";
-    private static final String SPACE_STRING = " ";
+    public static final String INCORRECT_WORD = "Incorrect word";
+    public static final String INCORRECT_WORD_LENGTH = "Incorrect word length";
+    public static final String INCORRECT_INPUT = "This word is not contains in dictionary";
+    public static final String GAME_WIN = "Game is win";
+    public static final String IN_GAME = "In game";
+    public static final String GAME_LOSE = "Game is lose";
+    public static final String START = "start";
+    public static final String EXIT = "exit";
+    public static final String INPUT_WORD = "Enter word:";
+    public static final String HIDDEN_WORD = "Hidden word";
+    public static final String END_GAME_MESSAGE = "Print 'start' to restart game or 'exit' to exit";
+    public static final String EMPTY_STRING = "";
+    public static final String SPACE_STRING = " ";
 
-    private final GameWordle gameWordle;
+    private GameWordle gameWordle;
 
     @Autowired
     public WordleInterface(GameWordle gameWordle) {
@@ -43,38 +44,45 @@ public class WordleInterface {
 
         try {
             gameWordle.startGame();
+        } catch (GameException gameException) {
+            gameException.printStackTrace();
+            return;
+        }
 
-            Scanner scanner = new Scanner(System.in);
-            String stepResult = EMPTY_STRING, inputWord;
-            System.out.println(CharactersDisplay.getCharactersNotation());
+        Scanner scanner = new Scanner(System.in);
+        String stepResult = EMPTY_STRING, inputWord;
+        System.out.println(CharactersDisplay.getCharactersNotation());
 
-            do {
-                while (!stepResult.equals(GAME_LOSE) && !stepResult.equals(GAME_WIN)) {
-                    System.out.println(INPUT_WORD);
-                    inputWord = scanner.nextLine();
-                    stepResult = inputWordStepResult(inputWord);
 
+        do {
+            while (!stepResult.equals(GAME_LOSE) && !stepResult.equals(GAME_WIN)) {
+                System.out.println(INPUT_WORD);
+                inputWord = scanner.nextLine();
+                stepResult = inputWordStepResult(inputWord);
+                try {
                     if (!stepResult.equals(INCORRECT_WORD_LENGTH) && !stepResult.equals(INCORRECT_INPUT)) {
                         printCharactersPositions(gameWordle.getGameRule().checkCharactersPosition(inputWord, gameWordle.getHiddenWord()));
                     }
+                } catch (GameException gameException) {
+                    System.err.println(gameException.getMessage());
                 }
                 System.out.println(stepResult);
                 if (stepResult.equals(GAME_LOSE)) {
                     System.out.println(HIDDEN_WORD + gameWordle.getHiddenWord());
                 }
-
-                System.out.println(END_GAME_MESSAGE);
-                inputWord = scanner.nextLine();
-                if (inputWord.equals(START)) {
+            }
+            System.out.println(END_GAME_MESSAGE);
+            inputWord = scanner.nextLine();
+            if (inputWord.equals(START)) {
+                try {
                     gameWordle.restartGame();
+                } catch (GameException gameException) {
+                    gameException.printStackTrace();
+                    return;
                 }
                 stepResult = EMPTY_STRING;
-
-            } while (!inputWord.equals(EXIT));
-        } catch (GameException gameException) {
-            System.err.println(gameException.getMessage());
-            return;
-        }
+            }
+        } while (!inputWord.equals(EXIT));
     }
 
     private String inputWordStepResult(String inputWord) {

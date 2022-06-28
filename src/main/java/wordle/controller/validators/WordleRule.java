@@ -1,10 +1,12 @@
 package wordle.controller.validators;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import wordle.model.Dictionary;
-import wordle.model.WordCharacter;
-import wordle.utils.exceptions.GameException;
+import wordle.model.dictionary.DatabaseDictionary;
+import wordle.model.dictionary.Dictionary;
+import wordle.model.dictionary.WordCharacter;
+import wordle.model.exceptions.GameException;
 import wordle.controller.CharacterPosition;
 
 import java.util.LinkedList;
@@ -16,12 +18,12 @@ import java.util.List;
 @Component
 public class WordleRule {
 
-    private static final int WORD_LENGTH = 5;
+    public static final int WORD_LENGTH = 5;
     private static final int MAX_STEPS = 6;
     private final Dictionary dictionary;
 
     @Autowired
-    public WordleRule(Dictionary dictionary) {
+    public WordleRule(@Qualifier("databaseDictionary") Dictionary dictionary) {
         this.dictionary = dictionary;
     }
 
@@ -62,14 +64,14 @@ public class WordleRule {
     /**
      * Проверка корректности введенного слова
      *
-     * @param inputWord - слово введеное пользователем
+     * @param inputWord - слово введенное пользователем
      * @return - соответствует ли слово правилам игры
      */
     public boolean isCorrectWord(String inputWord) throws GameException {
         if (inputWord.length() != WORD_LENGTH) {
             return false;
         }
-        return dictionary.isContainsWord(inputWord.toLowerCase());
+        return dictionary.isContainsWord(inputWord);
     }
 
     /**
@@ -79,7 +81,7 @@ public class WordleRule {
      * @return - true, если значение шага не превышает лимит шагов, иначе false
      */
     public boolean isInvalidStep(int step) {
-        return step >= MAX_STEPS;
+        return step > MAX_STEPS;
     }
 
 }

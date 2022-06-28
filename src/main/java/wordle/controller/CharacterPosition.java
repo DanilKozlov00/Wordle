@@ -1,7 +1,7 @@
 package wordle.controller;
 
 /**
- * Перечесление возможных состояний буквы в слове
+ * Перечисление возможных состояний буквы в слове
  */
 public enum CharacterPosition {
     CORRECT_POSITION,

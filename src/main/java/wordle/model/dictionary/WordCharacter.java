@@ -1,8 +1,6 @@
-package wordle.model;
-
+package wordle.model.dictionary;
 
 import wordle.controller.CharacterPosition;
-
 
 public class WordCharacter {
 

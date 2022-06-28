@@ -1,10 +1,12 @@
-package wordle.model;
+package wordle.model.dictionary;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import wordle.utils.exceptions.GameException;
+import wordle.model.dictionary.Dictionary;
+import wordle.model.exceptions.GameException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static wordle.utils.Constants.*;
+import static wordle.model.exceptions.GameException.*;
 
 /**
  * Реализация текстового словаря
@@ -20,7 +22,7 @@ import static wordle.utils.Constants.*;
 @Component
 public class TxtDictionary implements Dictionary {
 
-    private static final int DEFAULT_PAGE_SIZE = 1000;
+    private final int DEFAULT_PAGE_SIZE = 1000;
 
     private final String dictionaryFileName;
 
@@ -46,7 +48,7 @@ public class TxtDictionary implements Dictionary {
         List<String> currentPageWords;
         while (!(currentPageWords = readPage(currentPage)).isEmpty()) {
             currentPage++;
-            if (currentPageWords.contains(word)) {
+            if (currentPageWords.contains(word.toLowerCase())) {
                 return true;
             }
         }
@@ -68,7 +70,7 @@ public class TxtDictionary implements Dictionary {
             String line;
             if (currentPage == page) {
                 while ((line = reader.readLine()) != null && pageWords.size() != DEFAULT_PAGE_SIZE) {
-                    pageWords.add(line);
+                    pageWords.add(line.toLowerCase());
                 }
             }
         } catch (FileNotFoundException fileNotFoundException) {
@@ -80,8 +82,9 @@ public class TxtDictionary implements Dictionary {
         return pageWords;
     }
 
-    private BufferedReader getReader() throws FileNotFoundException {
-        return new BufferedReader(new InputStreamReader(new FileInputStream(dictionaryFileName), StandardCharsets.UTF_8));
+    private BufferedReader getReader() throws IOException {
+        File resource = new ClassPathResource(dictionaryFileName).getFile();
+        return new BufferedReader(new InputStreamReader(new FileInputStream(resource), StandardCharsets.UTF_8));
     }
 
     private int getCountFileLines() throws GameException {

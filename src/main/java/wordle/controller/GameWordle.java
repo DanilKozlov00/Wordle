@@ -1,13 +1,12 @@
 package wordle.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import wordle.controller.validators.WordleRule;
-import wordle.utils.exceptions.GameException;
+import wordle.model.exceptions.GameException;
 
 /**
- * Класс игры Wordle
+ * Класс игры Wordle.
  * Отвечает за состояние игры
  */
 @Component
@@ -64,7 +63,7 @@ public class GameWordle {
     /**
      * Геттер
      *
-     * @return - возращает загаданное слово
+     * @return - возвращает загаданное слово
      */
     public String getHiddenWord() {
         return hiddenWord;

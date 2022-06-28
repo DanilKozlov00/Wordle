@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="dkozlov (generated)" id="1656420856211-1">
+        <createSequence sequenceName="attempt_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-2">
+        <createSequence sequenceName="dictionary_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-3">
+        <createSequence sequenceName="step_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-4">
+        <createSequence sequenceName="user_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-5">
+        <createSequence sequenceName="word_character_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-6">
+        <createSequence sequenceName="word_dictionary_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-7">
+        <createSequence sequenceName="word_id_seq"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-8">
+        <createTable tableName="attempt">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="attempt_pkey"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="coins_win" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_admin_accrued" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_win" type="BOOL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-9">
+        <createTable tableName="dictionary">
+            <column autoIncrement="true" name="id" type="SMALLSERIAL(5)">
+                <constraints primaryKey="true" primaryKeyName="dictionary_pkey"/>
+            </column>
+            <column name="name" type="BPCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-10">
+        <createTable tableName="step">
+            <column name="number" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attempt_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="step_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-11">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="email" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(12)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nickname" type="VARCHAR(30)"/>
+            <column defaultValueNumeric="0" name="balance" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="ROLES(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-12">
+        <createTable tableName="word">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="word_pkey"/>
+            </column>
+            <column name="dictionary_id" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="word" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-13">
+        <createTable tableName="word_character">
+            <column autoIncrement="true" name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" primaryKeyName="word_character_pkey"/>
+            </column>
+            <column name="character_position" type="CHARACTER_POSITION(2147483647)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="step_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="character" type="CHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-14">
+        <addForeignKeyConstraint baseColumnNames="attempt_id" baseTableName="step" constraintName="attempt" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="attempt"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-15">
+        <addForeignKeyConstraint baseColumnNames="dictionary_id" baseTableName="word" constraintName="dictionary" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="dictionary"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-16">
+        <addForeignKeyConstraint baseColumnNames="step_id" baseTableName="word_character" constraintName="step" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="step"/>
+    </changeSet>
+    <changeSet author="dkozlov (generated)" id="1656420856211-17">
+        <addForeignKeyConstraint baseColumnNames="user" baseTableName="attempt" constraintName="user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+</databaseChangeLog>

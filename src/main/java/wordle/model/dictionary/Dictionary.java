@@ -1,6 +1,6 @@
-package wordle.model;
+package wordle.model.dictionary;
 
-import wordle.utils.exceptions.GameException;
+import wordle.model.exceptions.GameException;
 
 /**
  * интерфейс словаря
