@@ -1,19 +1,26 @@
-CREATE SEQUENCE IF NOT EXISTS user_id_seq;
-DROP TYPE IF EXISTS "public"."roles";
-CREATE TYPE "public"."roles" AS ENUM ('ROLE_admin', 'ROLE_user');
+DO
+$$
+    BEGIN
+        IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname = 'roles') THEN
+            CREATE TYPE "public"."roles" AS ENUM ('ROLE_admin', 'ROLE_user');
+        END IF;
+    END
+$$;
 
-CREATE TABLE IF NOT EXISTS "public"."user"
+
+CREATE TABLE IF NOT EXISTS public."user"
 (
-    "id"       int8             NOT NULL DEFAULT nextval('user_id_seq'::regclass),
-    "email"    varchar(50)      NOT NULL,
-    "password" varchar(255)     NOT NULL,
-    "phone"    varchar(12)      NOT NULL,
-    "name"     varchar(30)      NOT NULL,
-    "nickname" varchar(30),
-    "balance"  int8             NOT NULL DEFAULT 0,
-    "role"     "public"."roles" NOT NULL,
-    PRIMARY KEY ("id")
-);
+    id       bigint                                              NOT NULL DEFAULT nextval('user_id_seq'::regclass),
+    email    character varying(50) COLLATE pg_catalog."default"  NOT NULL,
+    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    phone    character varying(12) COLLATE pg_catalog."default"  NOT NULL,
+    name     character varying(30) COLLATE pg_catalog."default"  NOT NULL,
+    nickname character varying(30) COLLATE pg_catalog."default",
+    balance  bigint                                              NOT NULL DEFAULT 0,
+    role     roles                                               NOT NULL,
+    CONSTRAINT user_pkey PRIMARY KEY (id)
+)
+    TABLESPACE pg_default;
 
-INSERT INTO public."user"(id, email, password, phone, name, nickname, balance, role)
-VALUES (2, 'admin@gmail.com', 'admin', '88005556565', 'admin', 'admin', '0', 'ROLE_admin');
+ALTER TABLE IF EXISTS public."user"
+    OWNER to postgres;
