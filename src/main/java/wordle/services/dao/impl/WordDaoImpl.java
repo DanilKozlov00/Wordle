@@ -1,8 +1,5 @@
 package wordle.services.dao.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import wordle.model.dto.Word;
@@ -10,6 +7,7 @@ import wordle.services.dao.DaoSessionFactory;
 import wordle.services.dao.WordDao;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import java.util.Random;
 
 @Repository
@@ -31,14 +29,15 @@ public class WordDaoImpl extends DaoSessionFactory implements WordDao {
     @Override
     public Word getRandomWordFromDictionaryByDictionaryName(String dictionaryName) {
         Word result = null;
-        Criteria crit = getCurrentSession().createCriteria(Word.class);
-        crit.setProjection(Projections.rowCount());
-        int count = ((Number) crit.uniqueResult()).intValue();
+        TypedQuery<Long> q = getCurrentSession().createQuery("select  count (*) from Word as w where w.dictionary.name=:dictionaryName", Long.class).setParameter("dictionaryName", dictionaryName);
+        int count = q.getSingleResult().intValue();
         if (0 != count) {
             int index = new Random().nextInt(count);
-            crit = getCurrentSession().createCriteria(Word.class);
-            result = (Word) crit.setFirstResult(index).setMaxResults(1).uniqueResult();
-
+            TypedQuery<Word> query = getCurrentSession().createQuery("from Word as w where w.dictionary.name=:dictionaryName", Word.class).setParameter("dictionaryName", dictionaryName)
+                    .setParameter("dictionaryName", dictionaryName)
+                    .setFirstResult(index)
+                    .setMaxResults(1);
+            result = query.getSingleResult();
         }
         return result;
     }
