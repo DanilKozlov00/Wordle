@@ -3,12 +3,10 @@ package wordle.services.dao.impl;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import wordle.model.dto.Attempt;
 import wordle.model.dto.User;
 import wordle.model.dto.UserStatistic;
 import wordle.services.dao.DaoSessionFactory;
 import wordle.services.dao.UserStatisticDao;
-
 import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -44,6 +42,12 @@ public class UserStatisticDaoImpl extends DaoSessionFactory implements UserStati
         Session session = getCurrentSession();
         TypedQuery<Long> q = session.createQuery("select  count (*) from UserStatistic ", Long.class);
         return q.getSingleResult();
+    }
+
+    @Override
+    public void update(UserStatistic userStatistic) {
+        Session session = getCurrentSession();
+        session.update(userStatistic);
     }
 
 

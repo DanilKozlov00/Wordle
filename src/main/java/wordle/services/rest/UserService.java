@@ -3,6 +3,7 @@ package wordle.services.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wordle.model.dto.User;
+import wordle.model.dto.UserStatistic;
 import wordle.services.dao.UserDao;
 
 @Service
@@ -12,6 +13,9 @@ public class UserService {
     UserDao userDao;
 
     public User saveUser(User user) {
+        UserStatistic userStatistic = new UserStatistic();
+        userStatistic.setUser(user);
+        user.setStatistic(userStatistic);
         return userDao.save(user);
     }
 

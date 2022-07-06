@@ -11,7 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_statistic")
@@ -23,41 +27,32 @@ public class UserStatistic {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "games_count", nullable = false)
-    private Long gamesCount;
+    private Long gamesCount = 0L;
 
     @Column(name = "wins", nullable = false)
-    private Long wins;
+    private Long wins = 0L;
 
     @Column(name = "first_win", nullable = false)
-    private Integer firstWin;
+    private Integer firstWin = 0;
 
     @Column(name = "second_win", nullable = false)
-    private Integer secondWin;
+    private Integer secondWin = 0;
 
     @Column(name = "third_win", nullable = false)
-    private Integer thirdWin;
+    private Integer thirdWin = 0;
 
     @Column(name = "four_win", nullable = false)
-    private Integer fourWin;
+    private Integer fourWin = 0;
 
     @Column(name = "five_win", nullable = false)
-    private Integer fiveWin;
+    private Integer fiveWin = 0;
 
     @Column(name = "six_win", nullable = false)
-    private Integer sixWin;
+    private Integer sixWin = 0;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToOne(mappedBy = "statistic")
+    private User user;
 
     public User getUser() {
         return user;
@@ -65,6 +60,14 @@ public class UserStatistic {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getGamesCount() {
@@ -129,6 +132,38 @@ public class UserStatistic {
 
     public void setSixWin(Integer sixWin) {
         this.sixWin = sixWin;
+    }
+
+    public void incrementWins() {
+        this.wins++;
+    }
+
+    public void incrementGames() {
+        this.gamesCount++;
+    }
+
+    public void incrementFirstWins() {
+        this.firstWin++;
+    }
+
+    public void incrementSecondWins() {
+        this.secondWin++;
+    }
+
+    public void incrementThirdWins() {
+        this.thirdWin++;
+    }
+
+    public void incrementFourWins() {
+        this.fourWin++;
+    }
+
+    public void incrementFiveWins() {
+        this.fiveWin++;
+    }
+
+    public void incrementSixWins() {
+        this.sixWin++;
     }
 
 }

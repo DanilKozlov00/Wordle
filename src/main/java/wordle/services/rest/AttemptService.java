@@ -8,6 +8,7 @@ import wordle.model.dto.Step;
 import wordle.model.dto.User;
 import wordle.services.dao.AttemptDao;
 import wordle.services.dao.UserDao;
+import wordle.services.dao.UserStatisticDao;
 
 import java.util.HashSet;
 
@@ -22,6 +23,8 @@ public class AttemptService {
     UserDao userDao;
     @Autowired
     AttemptDao attemptDao;
+    @Autowired
+    UserStatisticService userStatisticService;
 
     public void save(List<List<WordCharacter>> wordCharacters, String email, Integer coins) {
         User user = userDao.getByEmail(email);
@@ -36,11 +39,13 @@ public class AttemptService {
                 step.setNumber(count++);
                 steps.add(step);
             }
+
             attempt.setSteps(steps);
             attemptDao.save(attempt);
             if (coins > 0) {
                 userDao.addCoinsToUserBalanceByEmail(email, coins);
             }
+            userStatisticService.updateUserStatistic(wordCharacters.size(), user, coins > 0);
         }
     }
 
@@ -79,5 +84,6 @@ public class AttemptService {
         }
         return result;
     }
+
 
 }

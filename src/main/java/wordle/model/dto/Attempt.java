@@ -40,7 +40,7 @@ public class Attempt {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "\"user\"", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long user;
 
     @Column(name = "coins_win", nullable = false)

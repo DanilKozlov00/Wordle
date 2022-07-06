@@ -11,4 +11,6 @@ public interface UserStatisticDao {
     List<UserStatistic> getUsersStatistic(int start, int end);
 
     Long getUsersStatisticsCount();
+
+    void update(UserStatistic userStatistic);
 }

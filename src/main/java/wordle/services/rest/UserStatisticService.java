@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wordle.model.dto.User;
 import wordle.model.dto.UserStatistic;
+import wordle.model.dto.WordCharacter;
 import wordle.services.dao.UserDao;
 import wordle.services.dao.UserStatisticDao;
 
@@ -28,6 +29,35 @@ public class UserStatisticService {
 
     public List<UserStatistic> getUsersStatistic(int start, int end) {
         return userStatisticDao.getUsersStatistic(start, end);
+    }
+
+    public void updateUserStatistic(int stepsCount, User user, boolean isWin) {
+        UserStatistic userStatistic = user.getStatistic();
+        userStatistic.incrementGames();
+        if (isWin) {
+            userStatistic.incrementWins();
+            switch (stepsCount) {
+                case 1:
+                    userStatistic.incrementFirstWins();
+                    break;
+                case 2:
+                    userStatistic.incrementSecondWins();
+                    break;
+                case 3:
+                    userStatistic.incrementThirdWins();
+                    break;
+                case 4:
+                    userStatistic.incrementFourWins();
+                    break;
+                case 5:
+                    userStatistic.incrementFiveWins();
+                    break;
+                case 6:
+                    userStatistic.incrementSixWins();
+                    break;
+            }
+        }
+        userStatisticDao.update(userStatistic);
     }
 
     public Long getUsersStatisticsCount() {

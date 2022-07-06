@@ -15,4 +15,6 @@ public interface UserDao {
     boolean updatePassword(String email, String newPassword);
 
     boolean updateEmail(String oldEmail, String newEmail);
+
+    void updateUser(User user);
 }

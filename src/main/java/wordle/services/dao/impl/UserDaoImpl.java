@@ -89,4 +89,10 @@ public class UserDaoImpl extends DaoSessionFactory implements UserDao {
         return false;
     }
 
+    @Override
+    public void updateUser(User user) {
+        Session session = getCurrentSession();
+        session.update(user);
+    }
+
 }

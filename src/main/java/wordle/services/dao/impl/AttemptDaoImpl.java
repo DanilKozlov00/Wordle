@@ -44,7 +44,7 @@ public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
         Session session = getCurrentSession();
         try {
             EntityGraph<?> graph = session.getEntityGraph("graph.AttemptSteps");
-            TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId order by date desc", Attempt.class)
+            TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId order by id desc", Attempt.class)
                     .setParameter("userId", userId).setMaxResults(1);
             q.setHint("javax.persistence.fetchgraph", graph);
             return q.getSingleResult();
