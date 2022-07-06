@@ -8,7 +8,6 @@ import wordle.model.dto.Step;
 import wordle.model.dto.User;
 import wordle.services.dao.AttemptDao;
 import wordle.services.dao.UserDao;
-import wordle.services.dao.UserStatisticDao;
 
 import java.util.HashSet;
 

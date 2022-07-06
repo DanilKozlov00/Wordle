@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wordle.model.dto.User;
 import wordle.model.dto.UserStatistic;
-import wordle.model.dto.WordCharacter;
 import wordle.services.dao.UserDao;
 import wordle.services.dao.UserStatisticDao;
 

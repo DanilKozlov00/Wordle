@@ -29,6 +29,8 @@ import java.util.Map;
 @Tag(name = "Регистрация", description = "REST контроллер формы регистрации")
 public class RegistrationController implements TemplateController {
 
+    public static final String USER = "user";
+    public static final String TOKEN = "token";
     private static final String USER_NOT_REGISTERED = "User not registered";
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -48,8 +50,8 @@ public class RegistrationController implements TemplateController {
         User registeredUser = userService.saveUser(user);
         if (registeredUser != null) {
             Map<String, Object> response = new HashMap<>();
-            response.put("user", registeredUser);
-            response.put("token", jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
+            response.put(USER, registeredUser);
+            response.put(TOKEN, jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
             return createOkResponseEntity(response);
         } else {
             return createErrorResponseEntity(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -2,15 +2,11 @@ package wordle.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wordle.model.dto.UserStatistic;
 import wordle.services.rest.AttemptService;
 import wordle.services.rest.UserService;
 import wordle.services.rest.UserStatisticService;
@@ -28,8 +23,11 @@ import wordle.services.rest.UserStatisticService;
 @RequestMapping("api/v1/profile")
 @Tag(name = "Профиль", description = "REST контроллер профиля")
 @PreAuthorize(("hasAuthority('user') or hasAuthority('admin') "))
-@SecurityRequirement(name="Authorization")
+@SecurityRequirement(name = "Authorization")
 public class ProfileController implements TemplateController {
+
+    private final static String UPDATED = "Updated";
+    private final static String NOT_UPDATED = "Not updated";
 
     private final UserService userService;
     private final AttemptService attemptService;
@@ -44,8 +42,6 @@ public class ProfileController implements TemplateController {
 
     @Operation(summary = "Вернет попытки пользователя", description = "Вернет попытки пользователя", tags = {"Профиль"})
     @GetMapping("attempts")
-    @Secured("ROLE_user")
-
     public ResponseEntity<?> getUserAttempts(@Parameter(description = "почта пользователя") @RequestParam String email,
                                              @Parameter(description = "старт выборки") @RequestParam int start,
                                              @Parameter(description = "конец выборки") @RequestParam int end) {
@@ -85,9 +81,9 @@ public class ProfileController implements TemplateController {
     public ResponseEntity<?> updatePassword(@Parameter(description = "почта пользователя") @RequestParam String email,
                                             @Parameter(description = "новый пароль") @RequestParam String newPassword) {
         if (userService.updatePassword(email, newPassword)) {
-            createOkResponseEntity("Updated");
+            createOkResponseEntity(UPDATED);
         }
-        return createErrorResponseEntity("Not updated", HttpStatus.INTERNAL_SERVER_ERROR);
+        return createErrorResponseEntity(NOT_UPDATED, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Operation(summary = "Обновит почту пользователя", description = "Обновит почту  пользователя", tags = {"Профиль"})
@@ -95,9 +91,9 @@ public class ProfileController implements TemplateController {
     public ResponseEntity<?> updateEmail(@Parameter(description = "текущая почта пользователя") @RequestParam String oldEmail,
                                          @Parameter(description = "новая почта пользователя") @RequestParam String newEmail) {
         if (userService.updateEmail(oldEmail, newEmail)) {
-            createOkResponseEntity("Updated");
+            createOkResponseEntity(UPDATED);
         }
-        return createErrorResponseEntity("Not updated", HttpStatus.INTERNAL_SERVER_ERROR);
+        return createErrorResponseEntity(NOT_UPDATED, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

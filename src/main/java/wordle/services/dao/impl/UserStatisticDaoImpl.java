@@ -7,6 +7,7 @@ import wordle.model.dto.User;
 import wordle.model.dto.UserStatistic;
 import wordle.services.dao.DaoSessionFactory;
 import wordle.services.dao.UserStatisticDao;
+
 import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;

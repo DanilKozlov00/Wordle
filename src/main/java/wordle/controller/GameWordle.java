@@ -16,31 +16,9 @@ public class GameWordle {
 
     private String hiddenWord;
 
-    private int countSteps = 1;
-
     @Autowired
     public GameWordle(WordleRule gameRule) {
         this.gameRule = gameRule;
-    }
-
-    public void startGame() throws GameException {
-        this.hiddenWord = gameRule.getRuleDictionary().getRandomWord();
-    }
-
-    /**
-     * Геттер
-     *
-     * @return возвращает кол-во шагов на данный момент
-     */
-    public int getCountSteps() {
-        return countSteps;
-    }
-
-    /**
-     * Увеличивает счетчик ходов на данный момент
-     */
-    public void incrementCountSteps() {
-        countSteps++;
     }
 
     /**
@@ -56,7 +34,6 @@ public class GameWordle {
      * Перезапускает игру с новым загаданным словом
      */
     public void restartGame() throws GameException {
-        countSteps = 1;
         hiddenWord = gameRule.getRuleDictionary().getRandomWord();
     }
 

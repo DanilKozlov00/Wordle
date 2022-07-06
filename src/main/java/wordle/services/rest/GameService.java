@@ -10,11 +10,14 @@ import wordle.model.exceptions.GameException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static wordle.view.WordleInterface.*;
-
 @Service
 public class GameService {
 
+    public static final String INCORRECT_WORD_LENGTH = "Incorrect word length";
+    public static final String GAME_WIN = "Game is win";
+    public static final String IN_GAME = "In game";
+    public static final String GAME_LOSE = "Game is lose";
+    public static final String HIDDEN_WORD = "Hidden word";
     private static final String WORD_IS_CORRECT = "Word is correct";
     private static final String WORD_IS_NOT_CONTAINS_IN_DICTIONARY = "Word is not contains in dictionary";
 

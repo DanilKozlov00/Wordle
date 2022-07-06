@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
+import static wordle.security.JwtTokenFilter.TOKEN_EXPIRED;
+
 @Component
 public class JwtTokenProvider {
 
@@ -59,7 +61,7 @@ public class JwtTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException(TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED);
         }
     }
 

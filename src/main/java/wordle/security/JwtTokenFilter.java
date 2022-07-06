@@ -16,10 +16,13 @@ import java.io.IOException;
 
 @Component
 public class JwtTokenFilter extends GenericFilterBean {
+    public static final String TOKEN_EXPIRED = "JWT token is expired or invalid";
     private final JwtTokenProvider jwtTokenProvider;
+
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
@@ -33,7 +36,7 @@ public class JwtTokenFilter extends GenericFilterBean {
         } catch (JwtAuthenticationException e) {
             SecurityContextHolder.clearContext();
             ((HttpServletResponse) servletResponse).sendError(e.getHttpStatus().value());
-            throw new JwtAuthenticationException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
+            throw new JwtAuthenticationException(TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

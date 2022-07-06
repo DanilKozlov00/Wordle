@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
 public class SecurityUser implements UserDetails {
 
     private final String username;
@@ -20,6 +19,13 @@ public class SecurityUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+    }
+
+    public static UserDetails fromUser(User user) {
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(),
+                Collections.singleton(user.getRole().getAuthorities())
+        );
     }
 
     @Override
@@ -55,12 +61,5 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public static UserDetails fromUser(User user) {
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(),
-                Collections.singleton(user.getRole().getAuthorities())
-        );
     }
 }

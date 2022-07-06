@@ -1,9 +1,5 @@
 package wordle.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +26,6 @@ import java.util.Set;
         }
 )
 @NamedEntityGraph(name = "graph.Attempt")
-@Schema
 public class Attempt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +47,7 @@ public class Attempt {
     @Column(name = "is_win", nullable = false)
     private Boolean isWin = false;
 
-    @OneToMany(mappedBy = "attempt", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "attempt", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Step> steps = new LinkedHashSet<>();
 
     public Attempt(LocalDate date, Long user, Integer coinsWin, Boolean isAdminAccrued, Boolean isWin) {

@@ -1,4 +1,4 @@
-package wordle.controller;
+package wordle.model.dto;
 
 /**
  * Перечисление возможных состояний буквы в слове

@@ -1,6 +1,5 @@
 package wordle.services.dao.impl;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,6 @@ import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.stream.Stream;
-
 
 @Repository
 @Transactional

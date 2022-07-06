@@ -26,11 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static wordle.controller.rest.RegistrationController.TOKEN;
+import static wordle.controller.rest.RegistrationController.USER;
+
 @RestController
 @RequestMapping(value = "api/v1/login")
 @Tag(name = "Вход", description = "REST контроллер формы входа")
 public class LoginController implements TemplateController {
 
+    public static final String USER_DOESNT_EXISTS = "User doesn't exists";
+    private static final String INVALID_EMAIL_OR_PASSWORD = "Invalid email/password combination";
     private final AuthenticationManager authenticationManager;
     private final UserDao userRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -49,15 +54,15 @@ public class LoginController implements TemplateController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.getByEmail(email);
             if (user == null) {
-                createErrorResponseEntity("User doesn't exists", HttpStatus.INTERNAL_SERVER_ERROR);
+                createErrorResponseEntity(USER_DOESNT_EXISTS, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             String token = jwtTokenProvider.createToken(email, user.getRole().name());
             Map<Object, Object> response = new HashMap<>();
-            response.put("user", user);
-            response.put("token", token);
+            response.put(USER, user);
+            response.put(TOKEN, token);
             return createOkResponseEntity(response);
         } catch (AuthenticationException e) {
-            return createErrorResponseEntity("Invalid email/password combination", HttpStatus.FORBIDDEN);
+            return createErrorResponseEntity(INVALID_EMAIL_OR_PASSWORD, HttpStatus.FORBIDDEN);
         }
     }
 

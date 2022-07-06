@@ -3,11 +3,10 @@ package wordle.controller.validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import wordle.model.dictionary.DatabaseDictionary;
 import wordle.model.dictionary.Dictionary;
 import wordle.model.dictionary.WordCharacter;
 import wordle.model.exceptions.GameException;
-import wordle.controller.CharacterPosition;
+import wordle.model.dto.CharacterPosition;
 
 import java.util.LinkedList;
 import java.util.List;

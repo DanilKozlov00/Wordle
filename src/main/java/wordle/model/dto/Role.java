@@ -2,7 +2,6 @@ package wordle.model.dto;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-
 public enum Role {
     ROLE_user("user"),
     ROLE_admin("admin");

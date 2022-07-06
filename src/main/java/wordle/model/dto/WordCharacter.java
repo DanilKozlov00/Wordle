@@ -2,9 +2,7 @@ package wordle.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.Type;
-import wordle.controller.CharacterPosition;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Schema
 @Entity
 @Table(name = "word_character")
 public class WordCharacter {

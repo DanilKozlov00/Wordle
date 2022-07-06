@@ -18,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static wordle.view.WordleInterface.GAME_LOSE;
-import static wordle.view.WordleInterface.HIDDEN_WORD;
-import static wordle.view.WordleInterface.IN_GAME;
+import static wordle.services.rest.GameService.*;
 
 @CrossOrigin(origins = "*")
 @RestController

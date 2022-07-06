@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import wordle.model.dto.User;
 import wordle.services.dao.UserDao;
 
+import static wordle.controller.rest.LoginController.USER_DOESNT_EXISTS;
+
 @Service("userDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -22,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.getByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User doesn't exists");
+            throw new UsernameNotFoundException(USER_DOESNT_EXISTS);
         }
         return SecurityUser.fromUser(user);
     }
