@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.dictionary
 (
-    id   smallint                                   NOT NULL DEFAULT nextval('dictionary_id_seq'::regclass),
+    id   smallint                                   NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
     name character(30) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT dictionary_pkey PRIMARY KEY (id)
 )
