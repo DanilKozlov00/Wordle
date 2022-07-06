@@ -1,8 +1,10 @@
 package wordle.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.Hidden;
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,13 +22,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @Hidden
-    @JsonIgnore
     private Long id;
 
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -45,15 +46,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Type(type = "wordle.model.dto.EnumTypePostgreSql")
     private Role role = Role.ROLE_user;
-
-    public User(String email, String password, String phone, String name, String nickname, Role role) {
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.name = name;
-        this.nickname = nickname;
-        this.role = role;
-    }
 
     public User() {
     }

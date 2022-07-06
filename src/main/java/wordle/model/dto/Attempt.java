@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
@@ -34,8 +33,6 @@ import java.util.Set;
 @Schema
 public class Attempt {
     @Id
-    @Hidden
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -55,7 +52,7 @@ public class Attempt {
     @Column(name = "is_win", nullable = false)
     private Boolean isWin = false;
 
-    @OneToMany(mappedBy = "attempt", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "attempt", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<Step> steps = new LinkedHashSet<>();
 
     public Attempt(LocalDate date, Long user, Integer coinsWin, Boolean isAdminAccrued, Boolean isWin) {

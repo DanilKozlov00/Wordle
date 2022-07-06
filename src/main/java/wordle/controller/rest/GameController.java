@@ -2,19 +2,13 @@ package wordle.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
-import wordle.model.dictionary.WordCharacter;
 import wordle.services.rest.AttemptService;
 import wordle.services.rest.GameService;
 import wordle.model.exceptions.GameException;
@@ -30,7 +24,7 @@ import static wordle.view.WordleInterface.IN_GAME;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/game")
+@RequestMapping("api/v1/game")
 @Tag(name = "Игра", description = "REST контроллер игры")
 public class GameController implements TemplateController {
 
@@ -47,86 +41,7 @@ public class GameController implements TemplateController {
         this.attemptService = attemptService;
     }
 
-    @Operation(summary = "Возвращает результат шага", description = "Проверит переданное слово и вернет некоторый результат", tags = {"Игра"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Проверка проведена",
-                    content = @Content(
-                            examples = {@ExampleObject(name = "Стандартный ответ", summary = "слово корректно, статус - в игре",
-                                    value = "{\n" +
-                                            "    \"wordCharacters\": [\n" +
-                                            "        {\n" +
-                                            "            \"character\": \"w\",\n" +
-                                            "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "        },\n" +
-                                            "        {\n" +
-                                            "            \"character\": \"o\",\n" +
-                                            "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "        },\n" +
-                                            "        {\n" +
-                                            "            \"character\": \"r\",\n" +
-                                            "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "        },\n" +
-                                            "        {\n" +
-                                            "            \"character\": \"d\",\n" +
-                                            "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "        },\n" +
-                                            "        {\n" +
-                                            "            \"character\": \"s\",\n" +
-                                            "            \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                            "        }\n" +
-                                            "    ],\n" +
-                                            "    \"gameStatus\": \"In game\",\n" +
-                                            "    \"checkWordStatus\": \"Word is correct\"\n" +
-                                            "}"
-                            ),
-                                    @ExampleObject(name = "Стандартный ответ2", summary = "слово корректно, статус - игра проиграна",
-                                            value = "{\n" +
-                                                    "    \"wordCharacters\": [\n" +
-                                                    "        {\n" +
-                                                    "            \"character\": \"w\",\n" +
-                                                    "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                                    "        },\n" +
-                                                    "        {\n" +
-                                                    "            \"character\": \"o\",\n" +
-                                                    "            \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                                    "        },\n" +
-                                                    "        {\n" +
-                                                    "            \"character\": \"r\",\n" +
-                                                    "            \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                                    "        },\n" +
-                                                    "        {\n" +
-                                                    "            \"character\": \"d\",\n" +
-                                                    "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                                    "        },\n" +
-                                                    "        {\n" +
-                                                    "            \"character\": \"s\",\n" +
-                                                    "            \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                                    "        }\n" +
-                                                    "    ],\n" +
-                                                    "    \"gameStatus\": \"Game is lose\",\n" +
-                                                    "    \"checkWordStatus\": \"Word is correct\"\n" +
-                                                    "}"
-                                    ),
-                                    @ExampleObject(name = "Стандартный ответ3", summary = "слово некорректно, статус - в игре",
-                                            value = "{\n" +
-                                                    "    \"wordCharacters\": [],\n" +
-                                                    "    \"gameStatus\": \"In game\",\n" +
-                                                    "    \"checkWordStatus\": \"Incorrect word length\"\n" +
-                                                    "}"
-                                    )
-                            },
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = WordCharacter.class))
-            ),
-            @ApiResponse(responseCode = "500", description = "Ошибка словаря",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Ошибка", summary = "Ошибка работы со словарем",
-                                    value = "{\n" +
-                                            "    \"Error\": \"Dictionary file not found\"\n" +
-                                            "}"
-                            )
-                    }, mediaType = "application/json"))
-    })
+    @Operation(summary = "Возвращает результат шага", description = "Проверит переданное слово и вернет результат проверки", tags = {"Игра"})
     @GetMapping(value = "/stepResult")
     public ResponseEntity<?> getStepResult(
             @Parameter(description = "введенное слово") @RequestParam(value = "inputWord") String inputWord,
@@ -143,24 +58,8 @@ public class GameController implements TemplateController {
         return createOkResponseEntity(jsonResponse);
     }
 
+
     @Operation(summary = "Начнет новую игру", description = "Начнет игру с новым случайным словом", tags = {"Игра"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Игра началась",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Стандартный ответ", summary = "игра запущена, статус - в игре",
-                                    value = "{\n" +
-                                            "    \"Game status\": \"In game\",\n" +
-                                            "    \"Hidden word\": \"spoke\"\n" +
-                                            "}"
-                            )}, mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Ошибка словаря",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Ошибка", summary = "Ошибка запуска игры",
-                                    value = "{\n" +
-                                            "    \"Error\": \"Dictionary file not found\"\n" +
-                                            "}"
-                            )
-                    }, mediaType = "application/json"))})
     @PostMapping(value = "newGame")
     public ResponseEntity<?> startNewGame() {
         Map<String, Object> jsonResponse = new HashMap<>();
@@ -175,22 +74,6 @@ public class GameController implements TemplateController {
     }
 
     @Operation(summary = "Закончит игру", description = "закончит игру", tags = {"Игра"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Игра завершена",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Стандартный ответ", summary = "игра завершена, статус - игра проиграна",
-                                    value = "{\n" +
-                                            "    \"Game status\": \"Game is lose\",\n" +
-                                            "}"
-                            )}, mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Ошибка словаря",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Ошибка", summary = "Ошибка запуска игры",
-                                    value = "{\n" +
-                                            "    \"Error\": \"Dictionary file not found\"\n" +
-                                            "}"
-                            )
-                    }, mediaType = "application/json"))})
     @PostMapping(value = "surrender")
     public ResponseEntity<?> surrender() {
         try {
@@ -202,9 +85,8 @@ public class GameController implements TemplateController {
     }
 
     @Operation(summary = "Сохранит результат игры", description = "Сохранит результат игры и начислит монеты в случае победы", tags = {"Игра"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Результат сохранён")})
     @PostMapping(value = "endGame")
+    @PreAuthorize(("hasAuthority('user') or hasAuthority('admin') "))
     public ResponseEntity<?> endGame(@Parameter(description = "список проверок каждого шага") @RequestBody List<List<wordle.model.dto.WordCharacter>> wordCharacters,
                                      @Parameter(description = "почта пользователя") @RequestParam String email,
                                      @Parameter(description = "кол-во выигранных монет") @RequestParam Integer coins

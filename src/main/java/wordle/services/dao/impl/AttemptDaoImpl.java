@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import wordle.model.dto.Attempt;
+import wordle.model.dto.Step;
+import wordle.model.dto.WordCharacter;
 import wordle.services.dao.AttemptDao;
 import wordle.services.dao.DaoSessionFactory;
 
@@ -12,6 +14,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Repository
@@ -20,6 +23,7 @@ public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
     @Override
     public void save(Attempt attempt) {
         Session session = getCurrentSession();
+        setAttemptWithSteps(attempt);
         session.save(attempt);
     }
 
@@ -55,5 +59,18 @@ public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
         TypedQuery<Long> q = session.createQuery("select  count (*) from Attempt as a where a.user=:userId", Long.class)
                 .setParameter("userId", userId);
         return q.getSingleResult();
+    }
+
+    private void setAttemptWithSteps(Attempt attempt) {
+        for (Step step : attempt.getSteps()) {
+            step.setAttempt(attempt);
+            setStepsWithWordCharacters(step);
+        }
+    }
+
+    private void setStepsWithWordCharacters(Step step) {
+        for (WordCharacter wordCharacter : step.getWordCharacters()) {
+            wordCharacter.setStep(step);
+        }
     }
 }

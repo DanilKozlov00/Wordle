@@ -2,111 +2,50 @@ package wordle.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wordle.model.dto.Attempt;
+import wordle.model.dto.UserStatistic;
 import wordle.services.rest.AttemptService;
 import wordle.services.rest.UserService;
+import wordle.services.rest.UserStatisticService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("api/v1/profile")
 @Tag(name = "Профиль", description = "REST контроллер профиля")
+@PreAuthorize(("hasAuthority('user') or hasAuthority('admin') "))
+@SecurityRequirement(name="Authorization")
 public class ProfileController implements TemplateController {
 
     private final UserService userService;
     private final AttemptService attemptService;
+    private final UserStatisticService userStatisticService;
 
     @Autowired
-    public ProfileController(UserService userService, AttemptService attemptService) {
+    public ProfileController(UserService userService, AttemptService attemptService, UserStatisticService userStatisticService) {
         this.userService = userService;
         this.attemptService = attemptService;
+        this.userStatisticService = userStatisticService;
     }
 
     @Operation(summary = "Вернет попытки пользователя", description = "Вернет попытки пользователя", tags = {"Профиль"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Попытки пользователя",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Стандартный ответ", summary = "одна попытка",
-                                    value = "[\n" +
-                                            "    {\n" +
-                                            "        \"date\": [\n" +
-                                            "            2022,\n" +
-                                            "            6,\n" +
-                                            "            22\n" +
-                                            "        ],\n" +
-                                            "        \"coins_win\": 0,\n" +
-                                            "        \"is_admin_accrued\": false,\n" +
-                                            "        \"is_win\": false,\n" +
-                                            "        \"steps\": [\n" +
-                                            "            {\n" +
-                                            "                \"number\": 0,\n" +
-                                            "                \"wordCharacters\": [\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Г\",\n" +
-                                            "                        \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"А\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Р\",\n" +
-                                            "                        \"characterPosition\": \"CORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"А\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Ж\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    }\n" +
-                                            "                ]\n" +
-                                            "            },\n" +
-                                            "            {\n" +
-                                            "                \"number\": 1,\n" +
-                                            "                \"wordCharacters\": [\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"W\",\n" +
-                                            "                        \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"O\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"R\",\n" +
-                                            "                        \"characterPosition\": \"CORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"D\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"S\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    }\n" +
-                                            "                ]\n" +
-                                            "            }\n" +
-                                            "        ]\n" +
-                                            "    }\n" +
-                                            "]"
-                            )}, mediaType = "application/json", schema = @Schema(implementation = Attempt.class)))})
     @GetMapping("attempts")
+    @Secured("ROLE_user")
+
     public ResponseEntity<?> getUserAttempts(@Parameter(description = "почта пользователя") @RequestParam String email,
                                              @Parameter(description = "старт выборки") @RequestParam int start,
                                              @Parameter(description = "конец выборки") @RequestParam int end) {
@@ -114,8 +53,6 @@ public class ProfileController implements TemplateController {
     }
 
     @Operation(summary = "Вернет количество попыток пользователя", description = "Вернет количество попыток пользователя", tags = {"Профиль"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Количество попыток")})
     @GetMapping("attemptCount")
     public ResponseEntity<?> getUserAttemptCount(@Parameter(description = "почта пользователя") @RequestParam String email) {
         return createOkResponseEntity(attemptService.getAttemptCountByUserEmail(email));
@@ -123,90 +60,44 @@ public class ProfileController implements TemplateController {
 
 
     @Operation(summary = "Вернет последнюю попытку пользователя", description = "Вернет последнюю попытку пользователя", tags = {"Профиль"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Попытка пользователя",
-                    content = @Content(examples = {
-                            @ExampleObject(name = "Стандартный ответ", summary = "одна попытка",
-                                    value = "[\n" +
-                                            "    {\n" +
-                                            "        \"date\": [\n" +
-                                            "            2022,\n" +
-                                            "            6,\n" +
-                                            "            22\n" +
-                                            "        ],\n" +
-                                            "        \"coins_win\": 0,\n" +
-                                            "        \"is_admin_accrued\": false,\n" +
-                                            "        \"is_win\": false,\n" +
-                                            "        \"steps\": [\n" +
-                                            "            {\n" +
-                                            "                \"number\": 0,\n" +
-                                            "                \"wordCharacters\": [\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Г\",\n" +
-                                            "                        \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"А\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Р\",\n" +
-                                            "                        \"characterPosition\": \"CORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"А\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"Ж\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    }\n" +
-                                            "                ]\n" +
-                                            "            },\n" +
-                                            "            {\n" +
-                                            "                \"number\": 1,\n" +
-                                            "                \"wordCharacters\": [\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"W\",\n" +
-                                            "                        \"characterPosition\": \"INCORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"O\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"R\",\n" +
-                                            "                        \"characterPosition\": \"CORRECT_POSITION\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"D\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    },\n" +
-                                            "                    {\n" +
-                                            "                        \"character\": \"S\",\n" +
-                                            "                        \"characterPosition\": \"MISSING_IN_WORD\"\n" +
-                                            "                    }\n" +
-                                            "                ]\n" +
-                                            "            }\n" +
-                                            "        ]\n" +
-                                            "    }\n" +
-                                            "]"
-                            )}, mediaType = "application/json"))})
     @GetMapping("lastAttempt")
     public ResponseEntity<?> getLastUserAttempt(@Parameter(description = "почта пользователя") @RequestParam String email) {
         return createOkResponseEntity(attemptService.getLastAttemptByUserEmail(email));
     }
 
     @Operation(summary = "Удалит аккаунт пользователя", description = "Удалит аккаунт пользователя", tags = {"Профиль"})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Удалит аккаунт пользователя"),
-            @ApiResponse(responseCode = "500", description = "Ошибка удаления аккаунта")
-    })
-    @PostMapping("/deleteAccount")
+    @PostMapping("deleteAccount")
     public ResponseEntity<?> deleteAccount(@Parameter(description = "почта пользователя") @RequestParam String email) {
         if (userService.deleteUserByEmail(email)) {
             return createOkResponseEntity(HttpStatus.OK);
         }
         return createErrorResponseEntity("Account not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Operation(summary = "Вернет статистику пользователя", description = "Вернет статистику пользователя", tags = {"Профиль"})
+    @GetMapping("userStatistic")
+    public ResponseEntity<?> getUserStatistic(@Parameter(description = "почта пользователя") @RequestParam String email) {
+        return createOkResponseEntity(userStatisticService.getUserStatistic(email));
+    }
+
+    @Operation(summary = "Обновит пароль пользователя", description = "Обновит пароль пользователя", tags = {"Профиль"})
+    @PostMapping("updatePassword")
+    public ResponseEntity<?> updatePassword(@Parameter(description = "почта пользователя") @RequestParam String email,
+                                            @Parameter(description = "новый пароль") @RequestParam String newPassword) {
+        if (userService.updatePassword(email, newPassword)) {
+            createOkResponseEntity("Updated");
+        }
+        return createErrorResponseEntity("Not updated", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Operation(summary = "Обновит почту пользователя", description = "Обновит почту  пользователя", tags = {"Профиль"})
+    @PostMapping("updateEmail")
+    public ResponseEntity<?> updateEmail(@Parameter(description = "текущая почта пользователя") @RequestParam String oldEmail,
+                                         @Parameter(description = "новая почта пользователя") @RequestParam String newEmail) {
+        if (userService.updateEmail(oldEmail, newEmail)) {
+            createOkResponseEntity("Updated");
+        }
+        return createErrorResponseEntity("Not updated", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

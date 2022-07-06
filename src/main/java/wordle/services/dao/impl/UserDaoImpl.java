@@ -1,6 +1,9 @@
 package wordle.services.dao.impl;
 
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import wordle.model.dto.User;
@@ -13,6 +16,10 @@ import java.io.Serializable;
 @Repository
 @Transactional
 public class UserDaoImpl extends DaoSessionFactory implements UserDao {
+
+    @Autowired
+    @Lazy
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User save(User user) {
@@ -55,8 +62,31 @@ public class UserDaoImpl extends DaoSessionFactory implements UserDao {
         if (user != null) {
             user.setBalance(user.getBalance() + coins);
             session.update(user);
-
         }
+    }
+
+    @Override
+    public boolean updatePassword(String email, String newPassword) {
+        Session session = getCurrentSession();
+        User user = getByEmail(email);
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            session.update(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateEmail(String oldEmail, String newEmail) {
+        Session session = getCurrentSession();
+        User user = getByEmail(oldEmail);
+        if (user != null) {
+            user.setEmail(newEmail);
+            session.update(user);
+            return true;
+        }
+        return false;
     }
 
 }

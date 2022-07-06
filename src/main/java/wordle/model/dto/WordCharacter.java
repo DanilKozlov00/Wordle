@@ -23,8 +23,6 @@ import javax.persistence.Table;
 @Table(name = "word_character")
 public class WordCharacter {
     @Id
-    @Hidden
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;

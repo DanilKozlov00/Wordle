@@ -29,7 +29,6 @@ import javax.sql.DataSource;
 })
 public class SpringConfiguration implements WebMvcConfigurer {
 
-
     private final ApplicationContext applicationContext;
 
     @Autowired
@@ -46,7 +45,7 @@ public class SpringConfiguration implements WebMvcConfigurer {
     public SpringLiquibase springLiquibase(DataSource dataSource) {
         SpringLiquibase springLiquibase = new SpringLiquibase();
         springLiquibase.setDataSource(dataSource);
-        springLiquibase.setChangeLog("db/changelog/db.changelog-master.xml");
+        springLiquibase.setChangeLog("db/changelog/liquibase-changelog.xml");
         return springLiquibase;
     }
 
