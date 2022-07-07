@@ -14,24 +14,22 @@ public class UserStatisticService {
 
     @Autowired
     UserDao userDao;
-
     @Autowired
     UserStatisticDao userStatisticDao;
 
     public UserStatistic getUserStatistic(String email) {
         User user = userDao.getByEmail(email);
         if (user != null) {
-            return userStatisticDao.getByUser(user);
+            return user.getStatistic();
         }
         return null;
     }
 
-    public List<UserStatistic> getUsersStatistic(int start, int end) {
-        return userStatisticDao.getUsersStatistic(start, end);
+    public List<UserStatistic> getUsersStatistic(int start, int end, String param, String orderBy) {
+        return userStatisticDao.getUsersStatisticOrderByParam(start, end, param, orderBy);
     }
 
-    public void updateUserStatistic(int stepsCount, User user, boolean isWin) {
-        UserStatistic userStatistic = user.getStatistic();
+    public UserStatistic updateUserStatisticAsGameResult(int stepsCount, UserStatistic userStatistic, boolean isWin) {
         userStatistic.incrementGames();
         if (isWin) {
             userStatistic.incrementWins();
@@ -56,7 +54,7 @@ public class UserStatisticService {
                     break;
             }
         }
-        userStatisticDao.update(userStatistic);
+        return userStatistic;
     }
 
     public Long getUsersStatisticsCount() {

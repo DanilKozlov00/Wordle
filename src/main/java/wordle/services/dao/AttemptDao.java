@@ -6,9 +6,7 @@ import java.util.List;
 
 public interface AttemptDao {
 
-    void save(Attempt attempt);
-
-    List<Attempt> getAllByUserId(Long userId, int start, int end);
+    List<Attempt> getUserAttemptByUserIdOrderByParam(Long userId, int start, int end, String orderByParam, String orderBy);
 
     Attempt getLastAttemptByUserId(Long userId);
 

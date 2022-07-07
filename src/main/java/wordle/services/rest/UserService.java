@@ -30,4 +30,20 @@ public class UserService {
     public boolean updatePassword(String email, String newPassword) {
         return userDao.updatePassword(email, newPassword);
     }
+
+    public User getByEmail(String email) {
+        return userDao.getByEmail(email);
+    }
+
+    public User getByName(String name) {
+        return userDao.getByName(name);
+    }
+
+    public User getByNameAndEmail(String name, String email) {
+        return userDao.getByNameAndEmail(email, name);
+    }
+
+    public Long getUserRatingPosition(String email) {
+        return userDao.getRatingPosition(email);
+    }
 }

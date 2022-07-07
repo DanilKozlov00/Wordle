@@ -17,4 +17,8 @@ public class DaoSessionFactory {
         return sessionFactory.getCurrentSession();
     }
 
+    protected Session openSession() {
+        return sessionFactory.openSession();
+    }
+
 }

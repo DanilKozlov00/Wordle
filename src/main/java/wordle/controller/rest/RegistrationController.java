@@ -46,15 +46,19 @@ public class RegistrationController implements TemplateController {
     @Operation(summary = "Кнопка зарегистрироваться", description = "Кнопка зарегистрироваться", tags = {"Регистрация"})
     @PutMapping(value = "register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User registeredUser = userService.saveUser(user);
-        if (registeredUser != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put(USER, registeredUser);
-            response.put(TOKEN, jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
-            return createOkResponseEntity(response);
+        if (userService.getByEmail(user.getEmail()) != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            User registeredUser = userService.saveUser(user);
+            if (registeredUser != null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put(USER, registeredUser);
+                response.put(TOKEN, jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
+                return createOkResponseEntity(response);
+            } else {
+                return createErrorResponseEntity(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
-            return createErrorResponseEntity(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
+            return createErrorResponseEntity("User with this email is already exist's", HttpStatus.BAD_REQUEST);
         }
     }
 

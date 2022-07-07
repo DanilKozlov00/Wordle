@@ -4,8 +4,6 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import wordle.model.dto.Attempt;
-import wordle.model.dto.Step;
-import wordle.model.dto.WordCharacter;
 import wordle.services.dao.AttemptDao;
 import wordle.services.dao.DaoSessionFactory;
 
@@ -17,21 +15,12 @@ import java.util.List;
 @Repository
 @Transactional
 public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
-    @Override
-    public void save(Attempt attempt) {
-        Session session = getCurrentSession();
-        setAttemptWithSteps(attempt);
-        session.save(attempt);
-    }
 
     @Override
-    public List<Attempt> getAllByUserId(Long userId, int start, int end) {
+    public List<Attempt> getUserAttemptByUserIdOrderByParam(Long userId, int start, int end, String orderByParam, String orderBy) {
         Session session = getCurrentSession();
         EntityGraph<?> graph = session.getEntityGraph("graph.AttemptSteps");
-        TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId", Attempt.class)
-                .setParameter("userId", userId)
-                .setFirstResult(start)
-                .setMaxResults(end);
+        TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId order by a." + orderByParam + " " + orderBy, Attempt.class).setParameter("userId", userId).setFirstResult(start).setMaxResults(end);
         q.setHint("javax.persistence.fetchgraph", graph);
         return q.getResultList();
     }
@@ -41,8 +30,7 @@ public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
         Session session = getCurrentSession();
         try {
             EntityGraph<?> graph = session.getEntityGraph("graph.AttemptSteps");
-            TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId order by id desc", Attempt.class)
-                    .setParameter("userId", userId).setMaxResults(1);
+            TypedQuery<Attempt> q = session.createQuery("from Attempt as a where a.user=:userId order by id desc", Attempt.class).setParameter("userId", userId).setMaxResults(1);
             q.setHint("javax.persistence.fetchgraph", graph);
             return q.getSingleResult();
         } catch (NoResultException resultException) {
@@ -53,21 +41,7 @@ public class AttemptDaoImpl extends DaoSessionFactory implements AttemptDao {
     @Override
     public Long getAttemptCountByUserId(Long userId) {
         Session session = getCurrentSession();
-        TypedQuery<Long> q = session.createQuery("select  count (*) from Attempt as a where a.user=:userId", Long.class)
-                .setParameter("userId", userId);
+        TypedQuery<Long> q = session.createQuery("select  count (*) from Attempt as a where a.user=:userId", Long.class).setParameter("userId", userId);
         return q.getSingleResult();
-    }
-
-    private void setAttemptWithSteps(Attempt attempt) {
-        for (Step step : attempt.getSteps()) {
-            step.setAttempt(attempt);
-            setStepsWithWordCharacters(step);
-        }
-    }
-
-    private void setStepsWithWordCharacters(Step step) {
-        for (WordCharacter wordCharacter : step.getWordCharacters()) {
-            wordCharacter.setStep(step);
-        }
     }
 }

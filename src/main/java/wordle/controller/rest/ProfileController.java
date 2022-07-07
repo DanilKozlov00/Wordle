@@ -42,10 +42,13 @@ public class ProfileController implements TemplateController {
 
     @Operation(summary = "Вернет попытки пользователя", description = "Вернет попытки пользователя", tags = {"Профиль"})
     @GetMapping("attempts")
-    public ResponseEntity<?> getUserAttempts(@Parameter(description = "почта пользователя") @RequestParam String email,
-                                             @Parameter(description = "старт выборки") @RequestParam int start,
-                                             @Parameter(description = "конец выборки") @RequestParam int end) {
-        return createOkResponseEntity(attemptService.getAllByUserEmail(email, start, end));
+    public ResponseEntity<?> getUserAttemptsOrderParam(@Parameter(description = "почта пользователя") @RequestParam String email,
+                                                       @Parameter(description = "старт выборки") @RequestParam int start,
+                                                       @Parameter(description = "конец выборки") @RequestParam int end,
+                                                       @Parameter(description = "параметр выборки") @RequestParam String param,
+                                                       @Parameter(description = "направление выборки убывание/возрастание (desc,asc)") String orderBy
+    ) {
+        return createOkResponseEntity(attemptService.getUserAttemptByUserIdOrderByParam(email, start, end, param, orderBy));
     }
 
     @Operation(summary = "Вернет количество попыток пользователя", description = "Вернет количество попыток пользователя", tags = {"Профиль"})

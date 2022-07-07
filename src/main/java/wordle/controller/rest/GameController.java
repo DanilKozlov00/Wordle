@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import wordle.services.rest.AttemptService;
 import wordle.services.rest.GameService;
 import wordle.model.exceptions.GameException;
 
@@ -31,12 +30,10 @@ public class GameController implements TemplateController {
     private static final String WORD_CHARACTERS = "wordCharacters";
 
     private final GameService gameService;
-    private final AttemptService attemptService;
 
     @Autowired
-    public GameController(GameService gameService, AttemptService attemptService) {
+    public GameController(GameService gameService) {
         this.gameService = gameService;
-        this.attemptService = attemptService;
     }
 
     @Operation(summary = "Возвращает результат шага", description = "Проверит переданное слово и вернет результат проверки", tags = {"Игра"})
@@ -89,8 +86,10 @@ public class GameController implements TemplateController {
                                      @Parameter(description = "почта пользователя") @RequestParam String email,
                                      @Parameter(description = "кол-во выигранных монет") @RequestParam Integer coins
     ) {
-        attemptService.save(wordCharacters, email, coins);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (gameService.saveGameResult(wordCharacters, email, coins)) {
+            return createOkResponseEntity("Saved");
+        }
+        return createErrorResponseEntity("Not saved", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

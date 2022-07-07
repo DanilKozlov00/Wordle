@@ -129,4 +129,8 @@ public class User {
     public void setBalance(Long balance) {
         this.balance = balance;
     }
+
+    public void addToBalance(int coins) {
+        balance += coins;
+    }
 }
