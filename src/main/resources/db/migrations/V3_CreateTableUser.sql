@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public."user"
     CONSTRAINT statistic FOREIGN KEY (statistic_id)
         REFERENCES public.user_statistic (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
     TABLESPACE pg_default;
 

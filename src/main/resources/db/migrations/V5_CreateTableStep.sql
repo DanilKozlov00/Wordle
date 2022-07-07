@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.step
     CONSTRAINT attempt FOREIGN KEY (attempt_id)
         REFERENCES public.attempt (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 )
     TABLESPACE pg_default;
 

@@ -68,6 +68,7 @@ public class ProfileController implements TemplateController {
     @PostMapping("deleteAccount")
     public ResponseEntity<?> deleteAccount(@Parameter(description = "почта пользователя") @RequestParam String email) {
         if (userService.deleteUserByEmail(email)) {
+
             return createOkResponseEntity(HttpStatus.OK);
         }
         return createErrorResponseEntity("Account not deleted", HttpStatus.INTERNAL_SERVER_ERROR);

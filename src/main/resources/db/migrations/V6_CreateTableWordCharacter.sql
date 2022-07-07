@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.word_character
     CONSTRAINT step FOREIGN KEY (step_id)
         REFERENCES public.step (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE CASCADE
 
 )
     TABLESPACE pg_default;
