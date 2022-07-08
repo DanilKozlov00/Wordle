@@ -14,11 +14,13 @@ import java.util.Random;
 @Transactional
 public class WordDaoImpl extends DaoSessionFactory implements WordDao {
 
+    private static final String DICTIONARY_NAME = "dictionaryName";
+
     @Override
     public Word getWordFromDictionaryByDictionaryName(String dictionaryName, String word) {
         try {
             return getCurrentSession().createQuery("from Word as w where w.dictionary.name=:dictionaryName and w.word=:word", Word.class)
-                    .setParameter("dictionaryName", dictionaryName)
+                    .setParameter(DICTIONARY_NAME, dictionaryName)
                     .setParameter("word", word)
                     .getSingleResult();
         } catch (NoResultException noResultException) {
@@ -29,12 +31,12 @@ public class WordDaoImpl extends DaoSessionFactory implements WordDao {
     @Override
     public Word getRandomWordFromDictionaryByDictionaryName(String dictionaryName) {
         Word result = null;
-        TypedQuery<Long> q = getCurrentSession().createQuery("select  count (*) from Word as w where w.dictionary.name=:dictionaryName", Long.class).setParameter("dictionaryName", dictionaryName);
+        TypedQuery<Long> q = getCurrentSession().createQuery("select  count (*) from Word as w where w.dictionary.name=:dictionaryName", Long.class).setParameter(DICTIONARY_NAME, dictionaryName);
         int count = q.getSingleResult().intValue();
         if (0 != count) {
             int index = new Random().nextInt(count);
-            TypedQuery<Word> query = getCurrentSession().createQuery("from Word as w where w.dictionary.name=:dictionaryName", Word.class).setParameter("dictionaryName", dictionaryName)
-                    .setParameter("dictionaryName", dictionaryName)
+            TypedQuery<Word> query = getCurrentSession().createQuery("from Word as w where w.dictionary.name=:dictionaryName", Word.class)
+                    .setParameter(DICTIONARY_NAME, dictionaryName)
                     .setFirstResult(index)
                     .setMaxResults(1);
             result = query.getSingleResult();

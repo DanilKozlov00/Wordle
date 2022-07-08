@@ -12,8 +12,6 @@ public interface UserDao {
 
     boolean deleteByEmail(String email);
 
-    void addCoinsToUserBalanceByEmail(User user, int coins);
-
     boolean updatePassword(String email, String newPassword);
 
     boolean updateEmail(String oldEmail, String newEmail);

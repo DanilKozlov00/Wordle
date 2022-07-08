@@ -1,6 +1,8 @@
 package wordle.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.hibernate.annotations.Type;
 
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "\"user\"")
@@ -30,6 +33,7 @@ public class User {
     private String email;
 
     @Hidden
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -55,7 +59,18 @@ public class User {
     @JoinColumn(name = "statistic_id", nullable = false)
     private UserStatistic statistic;
 
+    @Column(name = "registered_date")
+    private LocalDate registeredDate = java.time.LocalDate.now();
+
     public User() {
+    }
+
+    public LocalDate getRegisteredDate() {
+        return registeredDate;
+    }
+
+    public void setRegisteredDate(LocalDate registeredDate) {
+        this.registeredDate = registeredDate;
     }
 
     public UserStatistic getStatistic() {
@@ -64,6 +79,11 @@ public class User {
 
     public void setStatistic(UserStatistic statistic) {
         this.statistic = statistic;
+    }
+
+    @JsonGetter("password")
+    public String getJSONPassword() {
+        return null;
     }
 
     public Long getId() {
