@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import wordle.model.dto.User;
 import wordle.services.rest.AttemptService;
 import wordle.services.rest.UserService;
 import wordle.services.rest.UserStatisticService;
@@ -98,6 +99,20 @@ public class ProfileController implements TemplateController {
             createOkResponseEntity(UPDATED);
         }
         return createErrorResponseEntity(NOT_UPDATED, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @PostMapping("update")
+    public ResponseEntity<?> updateUser(@Parameter(description = "почта пользователя") @RequestParam String email,
+                                        @Parameter(description = "никнейм") @RequestParam(required = false) String nickname,
+                                        @Parameter(description = "имя") @RequestParam(required = false) String name,
+                                        @Parameter(description = "телефон") @RequestParam(required = false) String phone
+    ) {
+        User user = userService.update(email, nickname, name, phone);
+        if (user != null) {
+            return createOkResponseEntity(user);
+        }
+        return createErrorResponseEntity(ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

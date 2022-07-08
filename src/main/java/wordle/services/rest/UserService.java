@@ -46,4 +46,21 @@ public class UserService {
     public Long getUserRatingPosition(String email) {
         return userDao.getRatingPosition(email);
     }
+
+    public User update(String email, String name, String nickname, String phone) {
+        User user = getByEmail(email);
+        if (user != null) {
+            if (name != null) {
+                user.setName(name);
+            }
+            if (nickname != null) {
+                user.setNickname(nickname);
+            }
+            if (phone != null) {
+                user.setPhone(phone);
+            }
+            return userDao.update(user);
+        }
+        return null;
+    }
 }

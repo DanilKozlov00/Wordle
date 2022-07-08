@@ -22,5 +22,7 @@ public interface UserDao {
 
     Long getRatingPosition(String email);
 
+    User update(User user);
+
     List<User> getTopBalanceUsers(Integer count);
 }

@@ -50,6 +50,18 @@ public class UserDaoImpl extends DaoSessionFactory implements UserDao {
         }
     }
 
+    @Override
+    public User update(User user) {
+        try (Session session = openSession()) {
+            session.beginTransaction();
+            session.update(user);
+            session.flush();
+            session.getTransaction().commit();
+            return user;
+        } catch (HibernateException hibernateException) {
+            return null;
+        }
+    }
 
     @Override
     public boolean deleteByEmail(String email) {
