@@ -27,10 +27,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/registration")
 @Tag(name = "Регистрация", description = "REST контроллер формы регистрации")
-public class RegistrationController implements TemplateController {
-
-    public static final String USER = "user";
-    public static final String TOKEN = "token";
+public class RegistrationController extends TemplateController {
+    ;
     private static final String USER_NOT_REGISTERED = "User not registered";
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -50,10 +48,7 @@ public class RegistrationController implements TemplateController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User registeredUser = userService.saveUser(user);
             if (registeredUser != null) {
-                Map<String, Object> response = new HashMap<>();
-                response.put(USER, registeredUser);
-                response.put(TOKEN, jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
-                return createOkResponseEntity(response);
+                return createOkResponseEntity(jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
             } else {
                 return createErrorResponseEntity(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
             }

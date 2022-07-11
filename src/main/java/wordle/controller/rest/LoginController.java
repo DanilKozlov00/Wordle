@@ -23,16 +23,12 @@ import wordle.services.dao.UserDao;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
-import static wordle.controller.rest.RegistrationController.TOKEN;
-import static wordle.controller.rest.RegistrationController.USER;
 
 @RestController
 @RequestMapping(value = "api/v1/login")
 @Tag(name = "Вход", description = "REST контроллер формы входа")
-public class LoginController implements TemplateController {
+public class LoginController extends TemplateController {
 
     public static final String USER_DOESNT_EXISTS = "User doesn't exists";
     private static final String INVALID_EMAIL_OR_PASSWORD = "Invalid email/password combination";
@@ -57,10 +53,7 @@ public class LoginController implements TemplateController {
                 createErrorResponseEntity(USER_DOESNT_EXISTS, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             String token = jwtTokenProvider.createToken(email, user.getRole().name());
-            Map<Object, Object> response = new HashMap<>();
-            response.put(USER, user);
-            response.put(TOKEN, token);
-            return createOkResponseEntity(response);
+            return createOkResponseEntity(token);
         } catch (AuthenticationException e) {
             return createErrorResponseEntity(INVALID_EMAIL_OR_PASSWORD, HttpStatus.FORBIDDEN);
         }

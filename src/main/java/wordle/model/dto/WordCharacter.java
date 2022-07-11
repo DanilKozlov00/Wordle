@@ -22,6 +22,7 @@ public class WordCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @Hidden
     private Long id;
 
     @Column(name = "\"character\"", nullable = false, length = 1)

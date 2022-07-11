@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wordle.services.rest.UserRatingService;
 
+import static wordle.controller.rest.ProfileController.NOT_UPDATED;
+import static wordle.controller.rest.ProfileController.UPDATED;
+
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -21,7 +24,7 @@ import wordle.services.rest.UserRatingService;
 @PreAuthorize(("hasAuthority('admin')"))
 @SecurityRequirement(name = "Authorization")
 @Tag(name = "Администратор", description = "REST контроллер личного кабинета администратора")
-public class AdminController implements TemplateController {
+public class AdminController extends TemplateController {
 
     private final UserRatingService userRatingService;
 
@@ -33,8 +36,8 @@ public class AdminController implements TemplateController {
     @PostMapping("addCoinsAsEndMouth")
     public ResponseEntity<?> addCoinsAsEndMouth() {
         if (userRatingService.addCoinsAsEndMouth()) {
-            return createOkResponseEntity("Added");
+            return createOkResponseEntity(UPDATED);
         }
-        return createErrorResponseEntity("Not added", HttpStatus.INTERNAL_SERVER_ERROR);
+        return createErrorResponseEntity(NOT_UPDATED, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

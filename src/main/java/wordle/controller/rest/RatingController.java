@@ -17,7 +17,7 @@ import wordle.services.rest.UserStatisticService;
 @CrossOrigin(origins = "*")
 @RequestMapping("api/v1/rating")
 @Tag(name = "Рейтинг", description = "REST контроллер формы рейтинга")
-public class RatingController implements TemplateController {
+public class RatingController extends TemplateController {
 
     private final UserStatisticService userStatisticService;
     private final UserService userService;

@@ -9,6 +9,8 @@ import wordle.model.dto.Attempt;
 import wordle.model.dto.Step;
 import wordle.model.dto.User;
 import wordle.model.exceptions.GameException;
+import wordle.model.game.CheckWordStatus;
+import wordle.model.game.GameStatus;
 import wordle.services.dao.UserDao;
 import wordle.services.dao.impl.GameDao;
 
@@ -20,14 +22,7 @@ import java.util.Set;
 
 @Service
 public class GameService {
-
-    public static final String INCORRECT_WORD_LENGTH = "Incorrect word length";
-    public static final String GAME_WIN = "Game is win";
-    public static final String IN_GAME = "In game";
-    public static final String GAME_LOSE = "Game is lose";
     public static final String HIDDEN_WORD = "Hidden word";
-    private static final String WORD_IS_CORRECT = "Word is correct";
-    private static final String WORD_IS_NOT_CONTAINS_IN_DICTIONARY = "Word is not contains in dictionary";
 
     private final GameWordle gameWordle;
     private final WordleRule wordleRule;
@@ -52,26 +47,26 @@ public class GameService {
         return gameWordle.getHiddenWord();
     }
 
-    public String getCheckWordStatus(String word) throws GameException {
+    public CheckWordStatus getCheckWordStatus(String word) throws GameException {
         if (wordleRule.isCorrectWord(word)) {
-            return WORD_IS_CORRECT;
+            return CheckWordStatus.WORD_IS_CORRECT;
         }
         if (word.length() != wordleRule.getWordLength()) {
-            return INCORRECT_WORD_LENGTH;
+            return CheckWordStatus.INCORRECT_WORD_LENGTH;
         }
-        return WORD_IS_NOT_CONTAINS_IN_DICTIONARY;
+        return CheckWordStatus.WORD_IS_NOT_CONTAINS_IN_DICTIONARY;
     }
 
-    public String getGameStatus(String word, int step) {
+    public GameStatus getGameStatus(String word, int step) {
         if (!wordleRule.isInvalidStep(step)) {
             if (word.equalsIgnoreCase(gameWordle.getHiddenWord())) {
-                return GAME_WIN;
+                return GameStatus.GAME_WIN;
             }
             if (!wordleRule.isInvalidStep(step + 1)) {
-                return IN_GAME;
+                return GameStatus.IN_GAME;
             }
         }
-        return GAME_LOSE;
+        return GameStatus.GAME_LOSE;
     }
 
     public List<WordCharacter> getWordIndices(String word) throws GameException {
