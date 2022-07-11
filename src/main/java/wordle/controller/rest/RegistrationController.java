@@ -2,7 +2,6 @@ package wordle.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,15 +19,11 @@ import wordle.model.dto.User;
 import wordle.security.JwtTokenProvider;
 import wordle.services.rest.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/v1/registration")
 @Tag(name = "Регистрация", description = "REST контроллер формы регистрации")
 public class RegistrationController extends TemplateController {
-    ;
     private static final String USER_NOT_REGISTERED = "User not registered";
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -42,18 +37,23 @@ public class RegistrationController extends TemplateController {
     }
 
     @Operation(summary = "Кнопка зарегистрироваться", description = "Кнопка зарегистрироваться", tags = {"Регистрация"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Сущность пользователя", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "500", description = "Ошибка", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Такой пользователь уже существует", content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PutMapping(value = "register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userService.getByEmail(user.getEmail()) != null) {
+        if (userService.getByEmail(user.getEmail()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User registeredUser = userService.saveUser(user);
             if (registeredUser != null) {
-                return createOkResponseEntity(jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
+                return createStringOkResponseEntity(jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
             } else {
-                return createErrorResponseEntity(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
+                return createResponseEntityWithHttpStatus(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
-            return createErrorResponseEntity("User with this email is already exist's", HttpStatus.BAD_REQUEST);
+            return createResponseEntityWithHttpStatus("User with this email is already exist's", HttpStatus.BAD_REQUEST);
         }
     }
 

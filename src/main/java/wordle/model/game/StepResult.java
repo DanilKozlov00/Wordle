@@ -1,9 +1,11 @@
 package wordle.model.game;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import wordle.model.dictionary.WordCharacter;
 
 import java.util.List;
 
+@Schema
 public class StepResult {
     private String checkWordStatus;
     private List<WordCharacter> wordCharacters;

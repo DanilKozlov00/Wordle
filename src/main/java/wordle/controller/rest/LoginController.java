@@ -3,6 +3,10 @@ package wordle.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,18 +48,22 @@ public class LoginController extends TemplateController {
     }
 
     @Operation(summary = "Кнопка войти", description = "Кнопка войти", tags = {"Вход"})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Вход успешен", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "500", description = "Ошибка при проверке слова", content = @Content(schema = @Schema(implementation = String.class)))
+    })
     @PostMapping("signIn")
     public ResponseEntity<?> getUserByEmail(@Parameter(required = true, description = "email пользователя") @RequestParam String email, @Parameter(required = true, description = "пароль пользователя") @RequestParam String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             User user = userRepository.getByEmail(email);
             if (user == null) {
-                createErrorResponseEntity(USER_DOESNT_EXISTS, HttpStatus.INTERNAL_SERVER_ERROR);
+                createResponseEntityWithHttpStatus(USER_DOESNT_EXISTS, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             String token = jwtTokenProvider.createToken(email, user.getRole().name());
-            return createOkResponseEntity(token);
+            return createStringOkResponseEntity(token);
         } catch (AuthenticationException e) {
-            return createErrorResponseEntity(INVALID_EMAIL_OR_PASSWORD, HttpStatus.FORBIDDEN);
+            return createResponseEntityWithHttpStatus(INVALID_EMAIL_OR_PASSWORD, HttpStatus.FORBIDDEN);
         }
     }
 
