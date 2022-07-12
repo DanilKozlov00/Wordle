@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import wordle.model.dto.RefreshToken;
 import wordle.model.dto.User;
+import wordle.model.payload.TokenResponse;
 import wordle.security.JwtTokenProvider;
+import wordle.services.rest.RefreshTokenService;
 import wordle.services.rest.UserService;
 
 @CrossOrigin(origins = "*")
@@ -28,17 +31,19 @@ public class RegistrationController extends TemplateController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
     @Autowired
-    public RegistrationController(UserService userService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+    public RegistrationController(UserService userService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Operation(summary = "Кнопка зарегистрироваться", description = "Кнопка зарегистрироваться", tags = {"Регистрация"})
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Сущность пользователя", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "200", description = "Токены", content = @Content(schema = @Schema(implementation = TokenResponse.class))),
             @ApiResponse(responseCode = "500", description = "Ошибка", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Такой пользователь уже существует", content = @Content(schema = @Schema(implementation = String.class)))
     })
@@ -48,7 +53,9 @@ public class RegistrationController extends TemplateController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User registeredUser = userService.saveUser(user);
             if (registeredUser != null) {
-                return createStringOkResponseEntity(jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name()));
+                String token = jwtTokenProvider.createToken(registeredUser.getEmail(), registeredUser.getRole().name());
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+                return createObjectOkResponseEntity(new TokenResponse(token, refreshToken.getToken()));
             } else {
                 return createResponseEntityWithHttpStatus(USER_NOT_REGISTERED, HttpStatus.INTERNAL_SERVER_ERROR);
             }

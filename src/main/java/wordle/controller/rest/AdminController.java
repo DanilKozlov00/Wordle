@@ -40,7 +40,7 @@ public class AdminController extends TemplateController {
         this.userRatingService = userRatingService;
     }
 
-    @Operation(summary = "Добавит монеты топ игрокам", description = "Добавит монеты топ игрокам", tags = {"Игра"})
+    @Operation(summary = "Добавит монеты топ игрокам", description = "Добавит монеты топ игрокам", tags = {"Администратор"})
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Успешное обновление", content = @Content(schema = @Schema(implementation = Response.class))),
             @ApiResponse(responseCode = "500", description = "Ошибка", content = @Content(schema = @Schema(implementation = String.class))),

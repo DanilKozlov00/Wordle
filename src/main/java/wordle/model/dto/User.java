@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -60,16 +61,16 @@ public class User {
     private UserStatistic statistic;
 
     @Column(name = "registered_date")
-    private LocalDate registeredDate = java.time.LocalDate.now();
+    private Instant registeredDate = Instant.now();
 
     public User() {
     }
 
-    public LocalDate getRegisteredDate() {
+    public Instant getRegisteredDate() {
         return registeredDate;
     }
 
-    public void setRegisteredDate(LocalDate registeredDate) {
+    public void setRegisteredDate(Instant registeredDate) {
         this.registeredDate = registeredDate;
     }
 
